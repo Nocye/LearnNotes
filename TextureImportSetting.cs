@@ -20,6 +20,8 @@ public class TextureImportSetting : AssetPostprocessor
         //设置不同平台的图片压缩模式
         TextureImporterPlatformSettings textureSettings = importer.GetPlatformTextureSettings("Standalone");
         textureSettings.overridden = true;
+        //小坑:如果format枚举选择为ASTC_RGBA,则编辑器会报错,但可以正常修改,改为ASTC_RGB则没有问题,都可以正常修改为RGB(A) Compressed ASTC 6x6 block         
+        //猜测可能是Unity内部的枚举处理没有更新
         textureSettings.format = TextureImporterFormat.DXT5;
         importer.SetPlatformTextureSettings(textureSettings);
         importer.mipmapEnabled = false;
