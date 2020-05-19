@@ -9,7 +9,7 @@ using UnityEditor;
 public class TextureImportSetting : AssetPostprocessor
 {
     /// <summary>
-    /// 图片导入之前调用，可设置图片的格式、Tag……
+    /// 图片导入之前调用，可设置图片的格式,Tag,不同平台图片的压缩模式
     /// </summary>
     void OnPreprocessTexture()
     {
@@ -17,8 +17,12 @@ public class TextureImportSetting : AssetPostprocessor
         importer.textureType = TextureImporterType.Sprite; // 设置为Sprite类型
         importer.mipmapEnabled = false; // 禁用mipmap
         //importer.spritePackingTag = "tag"; // 设置Sprite的打包Tag
-
-        Debug.Log("OnPreprocessTexture");
+        //设置不同平台的图片压缩模式
+        TextureImporterPlatformSettings textureSettings = importer.GetPlatformTextureSettings("Standalone");
+        textureSettings.overridden = true;
+        textureSettings.format = TextureImporterFormat.DXT5;
+        importer.SetPlatformTextureSettings(textureSettings);
+        importer.mipmapEnabled = false;
     }
 
     /// <summary>
