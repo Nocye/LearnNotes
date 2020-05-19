@@ -3,32 +3,32 @@ using System.Collections;
 using UnityEditor;
 
 /// <summary>
-/// AssetPostprocessor£º ÌùÍ¼¡¢Ä£ĞÍ¡¢ÉùÒôµÈ×ÊÔ´µ¼ÈëÊ±µ÷ÓÃ£¬¿É×Ô¶¯ÉèÖÃÏàÓ¦²ÎÊı
-/// µ¼ÈëÍ¼Æ¬Ê±×Ô¶¯ÉèÖÃÍ¼Æ¬µÄ²ÎÊı
+/// AssetPostprocessorï¼š è´´å›¾ã€æ¨¡å‹ã€å£°éŸ³ç­‰èµ„æºå¯¼å…¥æ—¶è°ƒç”¨ï¼Œå¯è‡ªåŠ¨è®¾ç½®ç›¸åº”å‚æ•°
+/// å¯¼å…¥å›¾ç‰‡æ—¶è‡ªåŠ¨è®¾ç½®å›¾ç‰‡çš„å‚æ•°
 /// </summary>
 public class TextureImportSetting : AssetPostprocessor
 {
     /// <summary>
-    /// Í¼Æ¬µ¼ÈëÖ®Ç°µ÷ÓÃ£¬¿ÉÉèÖÃÍ¼Æ¬µÄ¸ñÊ½,Tag,²»Í¬Æ½Ì¨Í¼Æ¬µÄÑ¹ËõÄ£Ê½
+    /// å›¾ç‰‡å¯¼å…¥ä¹‹å‰è°ƒç”¨ï¼Œå¯è®¾ç½®å›¾ç‰‡çš„æ ¼å¼,Tag,ä¸åŒå¹³å°å›¾ç‰‡çš„å‹ç¼©æ¨¡å¼
     /// </summary>
     void OnPreprocessTexture()
     {
         TextureImporter importer = (TextureImporter)assetImporter;
-        importer.textureType = TextureImporterType.Sprite; // ÉèÖÃÎªSpriteÀàĞÍ
-        importer.mipmapEnabled = false; // ½ûÓÃmipmap
-        //importer.spritePackingTag = "tag"; // ÉèÖÃSpriteµÄ´ò°üTag
-        //ÉèÖÃ²»Í¬Æ½Ì¨µÄÍ¼Æ¬Ñ¹ËõÄ£Ê½
+        importer.textureType = TextureImporterType.Sprite; // è®¾ç½®ä¸ºSpriteç±»å‹
+        importer.mipmapEnabled = false; // ç¦ç”¨mipmap
+        //importer.spritePackingTag = "tag"; // è®¾ç½®Spriteçš„æ‰“åŒ…Tag
+        //è®¾ç½®ä¸åŒå¹³å°çš„å›¾ç‰‡å‹ç¼©æ¨¡å¼
         TextureImporterPlatformSettings textureSettings = importer.GetPlatformTextureSettings("Standalone");
         textureSettings.overridden = true;
-        //Ğ¡¿Ó:Èç¹ûformatÃ¶¾ÙÑ¡ÔñÎªASTC_RGBA,Ôò±à¼­Æ÷»á±¨´í,µ«¿ÉÒÔÕı³£ĞŞ¸Ä,¸ÄÎªASTC_RGBÔòÃ»ÓĞÎÊÌâ,¶¼¿ÉÒÔÕı³£ĞŞ¸ÄÎªRGB(A) Compressed ASTC 6x6 block         
-        //²Â²â¿ÉÄÜÊÇUnityÄÚ²¿µÄÃ¶¾Ù´¦ÀíÃ»ÓĞ¸üĞÂ
+        //å°å‘:å¦‚æœformatæšä¸¾é€‰æ‹©ä¸ºASTC_RGBA,åˆ™ç¼–è¾‘å™¨ä¼šæŠ¥é”™,ä½†å¯ä»¥æ­£å¸¸ä¿®æ”¹,æ”¹ä¸ºASTC_RGBåˆ™æ²¡æœ‰é—®é¢˜,éƒ½å¯ä»¥æ­£å¸¸ä¿®æ”¹ä¸ºRGB(A) Compressed ASTC 6x6 block         
+        //çŒœæµ‹å¯èƒ½æ˜¯Unityå†…éƒ¨çš„æšä¸¾å¤„ç†æ²¡æœ‰æ›´æ–°
         textureSettings.format = TextureImporterFormat.DXT5;
         importer.SetPlatformTextureSettings(textureSettings);
         importer.mipmapEnabled = false;
     }
 
     /// <summary>
-    /// Í¼Æ¬ÒÑ¾­±»Ñ¹Ëõ¡¢±£´æµ½Ö¸¶¨Ä¿Â¼ÏÂÖ®ºóµ÷ÓÃ
+    /// å›¾ç‰‡å·²ç»è¢«å‹ç¼©ã€ä¿å­˜åˆ°æŒ‡å®šç›®å½•ä¸‹ä¹‹åè°ƒç”¨
     /// </summary>
     /// <param name="texture"></param>
     void OnPostprocessTexure(Texture2D texture)
@@ -37,7 +37,7 @@ public class TextureImportSetting : AssetPostprocessor
     }
 
     /// <summary>
-    /// ËùÓĞ×ÊÔ´±»µ¼Èë¡¢É¾³ı¡¢ÒÆ¶¯Íê³ÉÖ®ºóµ÷ÓÃ
+    /// æ‰€æœ‰èµ„æºè¢«å¯¼å…¥ã€åˆ é™¤ã€ç§»åŠ¨å®Œæˆä¹‹åè°ƒç”¨
     /// </summary>
     /// <param name="importedAssets"></param>
     /// <param name="deletedAssets"></param>
