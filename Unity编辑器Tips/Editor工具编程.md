@@ -154,4 +154,26 @@
 > > 表示上一个toggle组的结束.这两个方法应该成对出现.方法中可以写别的逻辑
 >
 >  
+>
+> > ```c#
+> > EditorGUILayout.CurveField(string label, AnimationCurve value, params GUILayoutOption[] options);
+> > ```
+> >
+> > 创建一个编辑动画曲线的区域,value为待编辑的曲线
+>
+>  
+>
+> > ```c#
+> > EditorGUILayout.ObjectField(string label, UnityEngine.Object obj, Type objType, bool allowSceneObjects, params GUILayoutOption[] options);
+> > ```
+> >
+> > 创建一个可以选择UnityEngine.Object为对象的区域,obj为选择的对象,objType表示允许选择的对象,allowSceneObjects表示是否允许选择场景中的对象
+>
+>  
+>
+> > ```c#
+> > EditorGUILayout.HelpBox(string message, MessageType type, bool wide);
+> > ```
+> >
+> > 创建一个提示区域,根据MessageType的类型显示提示,wide为true则会覆盖整个窗口的宽度
 
