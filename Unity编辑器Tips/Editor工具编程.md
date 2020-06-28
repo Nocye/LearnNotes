@@ -3,6 +3,10 @@
 > [OnOpenAsset]
 >
 > 在Unity Project窗口中点击一个资源时触发的方法
+>
+> [CustomEditor(Type inspectedType,bool editorForChildClasses)]
+>
+> 告诉Editor脚本,它是哪个类的编辑器.如果bool值为真,则type的子类也会套用此编辑器.
 
 > ### 方法
 > >```c#
@@ -169,11 +173,33 @@
 > >
 > > 创建一个可以选择UnityEngine.Object为对象的区域,obj为选择的对象,objType表示允许选择的对象,allowSceneObjects表示是否允许选择场景中的对象
 >
+>   
+>
+> > ```c#
+> > EditorGUILayout.TextField(string text, params GUILayoutOption[] options); 
+> > ```
+> >
+> >  创建一个文本区域,可以编辑其中的内容,方法返回编辑后的字符串
+>
 >  
+>
+> 
 >
 > > ```c#
 > > EditorGUILayout.HelpBox(string message, MessageType type, bool wide);
 > > ```
 > >
 > > 创建一个提示区域,根据MessageType的类型显示提示,wide为true则会覆盖整个窗口的宽度
+>
+>  
+>
+> > ```c#
+> > Editor.OnInspectorGUI()
+> > ```
+> >
+> > 重写此方法,可以绘制自定义类在编辑器上的展示形式.
+>
+>  
+>
+>  
 
