@@ -51,3 +51,11 @@ AssetDatabase.Refresh();
 ```
 
 刷新编辑器下的Project窗口,和windows的F5刷新相似
+
+
+
+```c#
+AssetDatabase.GenerateUniqueAssetPath(string path);
+```
+
+为一个asset文件路径创造新的唯一路径,需要提供一个asset文件包含后缀名的路径,如果已有相同的文件,则在文件名之后附加数字1,再重新检查一次,依次递增
