@@ -7,6 +7,14 @@
 > [CustomEditor(Type inspectedType,bool editorForChildClasses)]
 >
 > 告诉Editor脚本,它是哪个类的编辑器.如果bool值为真,则type的子类也会套用此编辑器.
+>
+> [Header("标题名")]
+>
+> 在变量上添加这个特性,会在面板上的变量名中显示标题名
+>
+> [Tooltip("内容")]
+>
+> 再变量上添加这个特性,当鼠标悬浮在面板上的变量上时,会显示对应的内容
 
 > ### 方法
 > >```c#

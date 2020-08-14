@@ -1,0 +1,4 @@
+参考StartForce中的GameEntry脚本,在初始化时注册所有的GF组件,和自己的自定义组件,同时继承GF的ProcedureBase类 ,方便之后的自定义流程扩展
+
+重写和扩展自定义的Procedure后,记得在GF的预制体中选择Procedure,选择自己写好的流程和入口流程
+
