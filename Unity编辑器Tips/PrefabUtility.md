@@ -42,3 +42,11 @@ PrefabUtility.SaveAsPrefabAssetAndConnect(
 ```
 
 保存一个GameObject到文件夹中,注意无法保存已经是asset文件的预制体
+
+
+
+```c#
+PrefabUtility.GetCorrespondingObjectFromSource<TObject>(TObject componentOrGameObject) where TObject : UnityEngine.Object;
+```
+
+使用该函数获取源实例化的Prefab Asset对象。如果Prefab实例已断开连接，也会从Prefab Asset中返回相应的对象，然后可用于重新连接Prefab实例和Prefab Asset。

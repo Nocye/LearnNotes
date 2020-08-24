@@ -59,3 +59,13 @@ AssetDatabase.GenerateUniqueAssetPath(string path);
 ```
 
 为一个asset文件路径创造新的唯一路径,需要提供一个asset文件包含后缀名的路径,如果已有相同的文件,则在文件名之后附加数字1,再重新检查一次,依次递增
+
+
+
+```c#
+AssetDatabase.GetAssetPath(UnityEngine.Object assetObject)
+```
+
+返回存放资产的项目文件夹的相对路径名。
+
+所有的路径都是相对于项目文件夹的，例如 "Assets/MyTextures/hello.png"。

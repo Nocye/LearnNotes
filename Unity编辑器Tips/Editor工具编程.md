@@ -208,6 +208,14 @@
 > > 重写此方法,可以绘制自定义类在编辑器上的展示形式.
 >
 >  
+>
+> ```c#
+> EditorGUIUtility.PingObject(sourceObject);
+> ```
+>
+> 在场景中高亮一个对象，就像在Inspector中点击它一样。
+>
+> PingObject 会使层次结构高亮显示被 ping 的对象。被ping的对象不一定要被选中。例如GameObject.Find可以用来定位要ping的对象。
 
 
 
