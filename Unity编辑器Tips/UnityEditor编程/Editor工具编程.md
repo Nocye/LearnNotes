@@ -17,6 +17,9 @@
 > 再变量上添加这个特性,当鼠标悬浮在面板上的变量上时,会显示对应的内容
 
 > ### 方法
+>
+> EditorGUILayerout的方法为自动布局的方法,不需要传入显示的大小和位置,编辑器会根据检视面板自动布局
+>
 > >```c#
 > >EditorGUILayout.BeginHorizontal()
 > >```
@@ -207,15 +210,25 @@
 > >
 > > 重写此方法,可以绘制自定义类在编辑器上的展示形式.
 >
->  
->
-> ```c#
-> EditorGUIUtility.PingObject(sourceObject);
-> ```
->
-> 在场景中高亮一个对象，就像在Inspector中点击它一样。
->
-> PingObject 会使层次结构高亮显示被 ping 的对象。被ping的对象不一定要被选中。例如GameObject.Find可以用来定位要ping的对象。
+> 
+> 
+> > ```c#
+> > EditorGUILayout .GetControlRect
+> > ```
+> >
+> > 为一个Editor控件获取一个可绘制的矩形。
+>>
+> > 当创建一个新的Editor控件时，不依赖GUILayout(自动布局)来实现实际的控件，而是让控件取一个Rect作为参数，这与EditorGUI类中的控件类似，是一个合理的设计。例如,这确保了该控件也可以用于不允许使用GUILayout的PropertyDrawer中。
+>>
+> > 一旦实现了控件的非布局版本，也可以很容易地制作布局版本，它只需调用到非布局版本。为了得到控件的矩形拟合，可以使用GetControlRect函数。
+> >
+> > | hasLabel                  | 可选的布尔值，用于指定控件是否具有标签。默认为true。         |
+> > | ------------------------- | ------------------------------------------------------------ |
+> > | float height              | 控件的高度（以像素为单位）。默认值为[EditorGUIUtility.singleLineHeight](EditorGUIUtility-singleLineHeight.html)。 |
+> > | GUIStyle style            | 用于控件的可选[GUIStyle](GUIStyle.html)。                    |
+> > | GUILayoutOption[] options | 布局选项的可选列表，用于指定其他布局属性。此处传递的所有值都将覆盖由定义的设置`style`。另请参见：[GUILayout.Width](GUILayout.Width.html)，[GUILayout.Height](GUILayout.Height.html)，[GUILayout.MinWidth](GUILayout.MinWidth.html)，[GUILayout.MaxWidth](GUILayout.MaxWidth.html)，[GUILayout.MinHeight](GUILayout.MinHeight.html)， [GUILayout.MaxHeight](GUILayout.MaxHeight.html)，[GUILayout.ExpandWidth](GUILayout.ExpandWidth.html)，[GUILayout.ExpandHeight](GUILayout.ExpandHeight.html)。 |
+> >
+> > 
 
 
 
