@@ -22,4 +22,8 @@
 >
 > 创建自己的多行控件（例如，具有多个字段的自定义类的控件）时，可以使用[EditorGUILayout.GetControlRect](EditorGUILayout.GetControlRect.html)并传入一个高度值，该高度值是[EditorGUIUtility.singleLineHeight的倍数](EditorGUIUtility-singleLineHeight.html)。在对特定像素值进行硬编码时，建议这样做。另请参见：[EditorGUILayout.GetControlRect](EditorGUILayout.GetControlRect.html)。
 
- 
+> ```c#
+> EditorUtility.IsPersistent(UnityEngine.Object target);
+> ```
+>
+> 确认传入的对象是否保存在磁盘上
