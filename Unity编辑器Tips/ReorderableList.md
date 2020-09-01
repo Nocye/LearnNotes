@@ -10,7 +10,7 @@
 >
 > **drawFooterCallback**
 >
-> 绘制尾部回调
+> 绘制尾部回调,当想重绘LIst的添加和删除按钮的时候添加这个委托,如果为空则不绘制删除和添加按钮
 >
 > **drawElementCallback**
 >
