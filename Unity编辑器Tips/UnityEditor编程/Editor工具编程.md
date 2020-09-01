@@ -110,7 +110,7 @@
 > > GUILayout.Button(string text, params GUILayoutOption[] options);
 > > ```
 > >
-> > 创建一个按钮,需要通过if语句判断是否被点击,在if语句中做点击之后的处理.
+> > 创建一个按钮,需要通过if语句判断是否被点击,在if语句中做点击之后的处理.需要卸载OnGui中
 >
 >  
 >
