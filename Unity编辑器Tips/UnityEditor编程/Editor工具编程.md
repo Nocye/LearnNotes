@@ -32,7 +32,28 @@
 > >
 > >结束从上一个方法创建的组,两个方法应成对出现
 >
-> 
+>  
+>
+> > ```c#
+> > public static Vector2 BeginScrollView (Vector2 scrollPosition, bool alwaysShowHorizontal, bool alwaysShowVertical, GUIStyle horizontalScrollbar, GUIStyle verticalScrollbar, GUIStyle background, params GUILayoutOption[] options);
+> > ```
+> >
+> > ## 参数
+> >
+> > | scrollPosition      | 用于显示的位置。                                             |
+> > | ------------------- | ------------------------------------------------------------ |
+> > | alwayShowHorizontal | 可选参数，指示始终显示水平滚动条。如果为 false 或省略，则仅在滚动视图中的内容比滚动视图本身更宽时才显示。 |
+> > | alwayShowVertical   | 可选参数，指示始终显示垂直滚动条。如果为 false 或省略，则仅在滚动视图中的内容比滚动视图本身更高时才显示。 |
+> > | horizontalScrollbar | （可选）用于水平滚动条的 [GUIStyle](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle.html)。如果省略，则使用当前 [GUISkin](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUISkin.html) 的 `horizontalScrollbar` 样式。 |
+> > | verticalScrollbar   | （可选）用于垂直滚动条的 [GUIStyle](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle.html)。如果省略，则使用当前 [GUISkin](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUISkin.html) 的 `verticalScrollbar` 样式。 |
+> >
+> > 某些情况下,比如使用可排序列表时,根据列表的长短会造成超出窗口的显示范围,这时候需要用滚动视图来包裹他们,
+> >
+> > ```c#
+> > public static void EndScrollView ();
+> > ```
+> >
+> > 与上面的方法成对出现,表示一个滚动视图的结束
 >
 > > ```c#
 > >  EditorGUILayout.Space();
@@ -211,15 +232,15 @@
 > > 重写此方法,可以绘制自定义类在编辑器上的展示形式.
 >
 > 
-> 
+>
 > > ```c#
 > > EditorGUILayout .GetControlRect
 > > ```
 > >
 > > 为一个Editor控件获取一个可绘制的矩形。
->>
+> >
 > > 当创建一个新的Editor控件时，不依赖GUILayout(自动布局)来实现实际的控件，而是让控件取一个Rect作为参数，这与EditorGUI类中的控件类似，是一个合理的设计。例如,这确保了该控件也可以用于不允许使用GUILayout的PropertyDrawer中。
->>
+> >
 > > 一旦实现了控件的非布局版本，也可以很容易地制作布局版本，它只需调用到非布局版本。为了得到控件的矩形拟合，可以使用GetControlRect函数。
 > >
 > > | hasLabel                  | 可选的布尔值，用于指定控件是否具有标签。默认为true。         |
