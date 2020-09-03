@@ -4,13 +4,13 @@
 
 ## Events
 
-| [hierarchyChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-hierarchyChanged.html) | 当层级视图中的对象或对象组发生更改时引发的事件。 |
-| ------------------------------------------------------------ | ------------------------------------------------ |
-| [pauseStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-pauseStateChanged.html) | 每当编辑器的暂停状态发生更改时引发的事件。       |
-| [playModeStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-playModeStateChanged.html) | 每当编辑器的播放模式状态发生更改时引发的事件。   |
-| [projectChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-projectChanged.html) | 每当项目的状态发生更改时引发的事件。             |
-| [quitting](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-quitting.html) | 当编辑器应用程序退出时，Unity 会引发此事件。     |
-| [wantsToQuit](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-wantsToQuit.html) | 当编辑器应用程序想要退出时，Unity 会引发此事件。 |
+| [hierarchyChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-hierarchyChanged.html) | 当层级视图中的对象或对象组发生更改时引发的事件。             |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [pauseStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-pauseStateChanged.html) | 每当编辑器的暂停状态发生更改时引发的事件。                   |
+| [playModeStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-playModeStateChanged.html) | 每当编辑器的播放模式状态发生更改时引发的事件。(PlayModeStateChange枚举) |
+| [projectChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-projectChanged.html) | 每当项目的状态发生更改时引发的事件。                         |
+| [quitting](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-quitting.html) | 当编辑器应用程序退出时，Unity 会引发此事件。                 |
+| [wantsToQuit](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-wantsToQuit.html) | 当编辑器应用程序想要退出时，Unity 会引发此事件。             |
 
 | [projectWindowItemOnGUI](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-projectWindowItemOnGUI.html) | Project 窗口中每个可见列表项的 OnGUI 事件的委托。 |
 | ------------------------------------------------------------ | ------------------------------------------------- |
@@ -31,3 +31,23 @@ public static void UnlockReloadAssemblies ();
 ```
 
 必须在 LockReloadAssemblies 之后调用，以重新启用程序集的加载过程。(和上面成对出现)
+
+
+
+# PlayModeStateChange
+
+enumeration
+
+## 描述
+
+用于指定编辑器播放模式状态更改的枚举。
+
+另请参阅：[PauseState](https://docs.unity3d.com/cn/2019.4/ScriptReference/PauseState.html)、[EditorApplication.playModeStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-playModeStateChanged.html)、[EditorApplication.isPlaying](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-isPlaying.html)。
+
+## 变量
+
+| [EnteredEditMode](https://docs.unity3d.com/cn/2019.4/ScriptReference/PlayModeStateChange.EnteredEditMode.html) | 下次更新编辑器应用程序时发生，前提是应用程序处于编辑模式，且之前处于播放模式。 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| [ExitingEditMode](https://docs.unity3d.com/cn/2019.4/ScriptReference/PlayModeStateChange.ExitingEditMode.html) | 在编辑器进入播放模式之前以编辑模式退出时发生。               |
+| [EnteredPlayMode](https://docs.unity3d.com/cn/2019.4/ScriptReference/PlayModeStateChange.EnteredPlayMode.html) | 下次更新编辑器应用程序时发生，前提是应用程序处于播放模式，且之前处于编辑模式。 |
+| [ExitingPlayMode](https://docs.unity3d.com/cn/2019.4/ScriptReference/PlayModeStateChange.ExitingPlayMode.html) | 在编辑器进入编辑模式之前以播放模式退出时发生。               |
