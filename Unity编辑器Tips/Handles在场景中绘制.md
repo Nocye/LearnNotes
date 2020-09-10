@@ -12,3 +12,4 @@
 
 在挂载物体的脚本上OnDrawGizmos方法中调用Handles.Label
 
+![image-20200907221855831](https://raw.githubusercontent.com/Nocye/ImageBed/master/20200907221855.png)

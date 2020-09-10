@@ -7,7 +7,7 @@
 | [hierarchyChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-hierarchyChanged.html) | 当层级视图中的对象或对象组发生更改时引发的事件。             |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | [pauseStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-pauseStateChanged.html) | 每当编辑器的暂停状态发生更改时引发的事件。                   |
-| [playModeStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-playModeStateChanged.html) | 每当编辑器的播放模式状态发生更改时引发的事件。(PlayModeStateChange枚举) |
+| [playModeStateChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-playModeStateChanged.html) | 每当编辑器的播放模式状态发生更改时引发的事件。(PlayModeStateChange枚举)(巨坑注意:如果在编辑模式下注册了事件,在运行后会初始化,需要使用[InitializeOnLoad]或[RuntimeInitializeOnLoadMethod]装饰注册方法) |
 | [projectChanged](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-projectChanged.html) | 每当项目的状态发生更改时引发的事件。                         |
 | [quitting](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-quitting.html) | 当编辑器应用程序退出时，Unity 会引发此事件。                 |
 | [wantsToQuit](https://docs.unity3d.com/cn/2019.4/ScriptReference/EditorApplication-wantsToQuit.html) | 当编辑器应用程序想要退出时，Unity 会引发此事件。             |
