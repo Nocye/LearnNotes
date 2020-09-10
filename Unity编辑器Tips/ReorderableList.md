@@ -4,6 +4,22 @@
 
 这些委托可以直接调用,比如绘制尾部按钮时直接调用添加和删除回调,就可以很方便的进行操作
 
+> 坑注意:如果使用DoLayoutList();而不是DoList(Rect);给定一个矩形来绘制这个列表的话,假如列表超过了窗口大小,且你在窗口四周固定位置绘制了其他按钮,那么就会导致这些按钮无法被点击到,按钮点击事件会被列表的点击覆盖,虽然显示在列表层之上,这时候需要通过手算布局来计算出列表应该出现在的试图范围,例子:
+>
+> ```c#
+> //绘制列表,在尾部空出一行,给按钮
+>             Rect scrollRect = new Rect(0, 0, _setterWindow.position.width,
+>                 _setterWindow.position.height - EditorGUIUtility.singleLineHeight);
+>             Rect viewRect = new Rect(scrollRect.x, scrollRect.y, scrollRect.width, setList.GetHeight());
+>             //因为显示出纵向滚动条时会导致view略微变大,导致横向滚动条也出现,影响观感,直接禁掉
+>             scrollPosition = GUI.BeginScrollView(scrollRect, scrollPosition, viewRect, false, false, GUIStyle.none, GUI.skin.verticalScrollbar);
+>             setList.DoList(viewRect);
+>             GUI.EndScrollView();
+>             DrawBottomButton();
+> ```
+>
+> 
+
 > **drawHeaderCallback**
 >
 > 绘制标题时的回调
@@ -70,13 +86,18 @@
 >
 > **onCanRemoveCallback**
 >
-> 是否显示可移除按钮的回调
+> 是否可移除移除元素的回调(用于判断删除按钮是否可以被点击)
 >
 > **onCanAddCallback**
 >
-> 是否显示添加按钮的回调
+> 是否可以添加元素的回调(用于判断添加按钮是否可以被点击)
 >
 > **onChangedCallback**
 >
 > 列表改变时的回调
 
+> ```c#
+> public static ReorderableList.Defaults defaultBehaviours
+> ```
+>
+> 可重新排序列表的默认行为,反编译这部分代码后可以看到unity官方编写的可排序列表的绘制实现,是一个非常好的参考

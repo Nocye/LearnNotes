@@ -91,3 +91,40 @@
 > | **style**    | **可选的GUI样式。**                    |
 >
 > 创建一个可输入字符串的控件,返回输入的字符串
+
+> ```c#
+> public EditorGUI.DisabledScope (bool disabled);
+> ```
+>
+> ## 参数
+>
+> | disabled | 布尔值，用于指定是否应禁用组中的控件。 |
+> | -------- | -------------------------------------- |
+> |          |                                        |
+>
+> ## 描述
+>
+> 创建一个新的 DisabledScope 并开始相应的组。
+
+> # DisabledScope
+>
+> struct in UnityEditor
+>
+> ## 描述
+>
+> 创建一组可禁用的控件。
+>
+> 如果 Disabled 设置为 true，则将禁用组内的控件。 如果为 false，则不会更改 Enabled/Disabled 状态。
+>
+> 该组不能用于启用最初以其他方式禁用的控件。 这些组可以嵌套，如果子组本身已禁用或父组已禁用， 则子组中的控件将被禁用。
+>
+> 配合using使用
+>
+> ```c#
+> using(new EditorGUI.DisabledScope(bool)){
+> 
+> }
+> 
+> ```
+>
+> 
