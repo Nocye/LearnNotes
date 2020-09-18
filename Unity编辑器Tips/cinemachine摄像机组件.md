@@ -17,5 +17,5 @@
 |                   | *Fixed Update*  | Updated in sync with the Physics module, in FixedUpdate().   |
 |                   | *Late Update*   | Updated in MonoBehaviour `LateUpdate()`.                     |
 | **Targets**       |                 | 目标组中所有物体的列表                                       |
-|                   | *Weight*        | 平均时给该物体多少权重。不能为负数。                         |
+|                   | *Weight*        | 计算平均数时,给该物体多少权重。不能为负数。                  |
 |                   | *Radius*        | 物体的半径,用于计算物体的边界框,不能为负数                   |
