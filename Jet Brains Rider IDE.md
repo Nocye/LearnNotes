@@ -12,7 +12,7 @@
 
 [官方文档解释](https://www.jetbrains.com/help/rider/Settings_Debugger_Symbols.html)
 
-
+碰见一个有意思的坑,卸载VS会连同.net开发环境一起卸载,会造成rider默认从远程下载.net代码,远程下载的代码是没有注释的,下载回.net开发环境解决
 
 另外 在**Settings-Build, Execution, Deployment-Debugger-Enable external source debug** 选项
 
