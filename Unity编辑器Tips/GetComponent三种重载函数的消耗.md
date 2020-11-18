@@ -1,4 +1,4 @@
-## GetComponent三种重载函数的时间消耗
+## GetComponent三种重载函数
 
 unity版本2019.4.1f1
 
@@ -19,3 +19,5 @@ Type参数方法:19~17毫秒
 应完全避免使用字符串获取组件的方法,
 
 泛型方法的消耗可以忽略不计 只要避免在update之类的函数中调用,就不会发生性能问题
+
+**请注意，某些脚本方法在 Editor 中运行时会产生分配内存，但在构建项目后不会产生分配内存。`GetComponent` 是最常见的示例；此方法始终在 Editor 中执行时分配内存，而不会在已构建的项目中分配内存。** --来自[Unity官方手册](https://docs.unity3d.com/cn/current/Manual/BestPracticeUnderstandingPerformanceInUnity4-1.html)
