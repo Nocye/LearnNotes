@@ -2,6 +2,8 @@
 
 [Visual Studio2019黑色主题](https://plugins.jetbrains.com/plugin/12255-visual-studio-code-dark-plus-theme)
 
+unity打IL2CPP包时需要使用vs和win10SDK进行C++编码,如果有IL2CPP的需求还是需要装一个VS,记得打勾C++模块
+
 因为rider默认会开启反编译 反编译后的字段数量较多且复杂,除非遇到BUG否则不建议开启,关闭的位置为
 
 中文:**设置-工具-External Symbols-Decompile methods**
@@ -20,7 +22,11 @@
 
 [官方文档](https://www.jetbrains.com/help/rider/Settings_Debugger.html#dotNet)
 
-
+> #### 添加代码背景
+>
+> 打开setting-appearance&Behavior-Apperance
+>
+> 找到Background image..选项 打开设置其他的代码背景
 
 rider在碰到导航到DLL内的方法时,从自己的服务器查询有没有类似的代码,这个功能比较耗时,大部分情况不需要,可以关闭这个方法,位置为:
 
