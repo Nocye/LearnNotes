@@ -22,7 +22,7 @@
 >
 > 英文:**Execution, Deployment -- Debugger --  Enable external source debug** 打勾为打开
 
-
+unity的IL2CPP编译需要OPENJDK和VS的CPP环境,暂不确定rider是否可以代劳
 
 碰见一个有意思的坑,卸载VS会连同.net开发环境一起卸载,会造成rider默认从远程下载.net代码,远程下载的代码是没有注释的,下载回.net开发环境解决
 
