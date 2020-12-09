@@ -1,6 +1,6 @@
 # AssetDatabase(用于操作unity下的资源文件类)
 
-#### 使用这个类时,所有的目录都是工程的相对目录,例如"Assets/MyAwesomeProps"
+使用这个类时,所有的目录都是工程的相对目录,例如"Assets/MyAwesomeProps"
 
 ```c#
 AssetDatabase.FindAssets(string filter,string[] searchInFolders)
@@ -20,7 +20,7 @@ AssetDatabase.FindAssets(string filter,string[] searchInFolders)
 
 
 
-
+### 通过Guid返回资源的路径
 
 ```c#
 AssetDatabase.GUIDToAssetPath(string guid)
@@ -38,11 +38,13 @@ AssetDatabase.CreateAsset([NotNull] UnityEngine.Object asset, string path)
 
 你必须保证使用的路径是一个被支持的扩展('.mat' 代表 materials， '.cubemap' 代表 cubemaps， '.GUISkin' 代表 skins， '.anim' 代表 animations and '.asset' 代表任意其他的资源文件。)
 
+### 保存修改后的Asset
+
 ```c#
 AssetDatabase.SaveAssets();
 ```
 
-保存所有改变后的资源
+保存所有改变后的资源,比如TimeLine,在代码中修改后,如果不调用这个函数,则修改后的资源不会马上保存。
 
 
 

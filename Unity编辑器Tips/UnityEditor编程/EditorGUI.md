@@ -1,36 +1,30 @@
 ## 非自动布局的编辑器GUI类,基本需要通过Rect定位
 
-> ```c#
-> EditorGUI.PrefixLabel
-> ```
->
+### EditorGUI.PrefixLabel
+
 > | totalPosition | 标签和控件在屏幕上总共要使用的矩形。                   |
 > | ------------- | ------------------------------------------------------ |
 > | **id**        | **控件的唯一ID。如果没有指定，则使用下一个控件的ID。** |
-> | **label**     | **显示在控件前面的标签。**                             |
+>| **label**     | **显示在控件前面的标签。**                             |
 > | **style**     | **标签的样式。**                                       |
->
+> 
 > 创建一个在控件之前显示的标签,返回的是标签的Rect
 
-> ```c#
-> EditorGUI.IntSlider
-> ```
->
+### EditorGUI.IntSlider
+
 > | **position**   | 滑块在屏幕上使用的矩形。                 |
 > | -------------- | ---------------------------------------- |
 > | **label**      | **滑块前的可选标签。**                   |
-> | **value**      | **滑块显示的值。这决定了可拖动的位置。** |
+>| **value**      | **滑块显示的值。这决定了可拖动的位置。** |
 > | **leftValue**  | **滑块左端的值,最小值**                  |
 > | **rightValue** | **滑块右端的值,最大值**                  |
->
+> 
 > 创建一个滑动条,返回滑动条获取的值,有SerializedProperty的重载
 
-> ```c#
-> new EditorGUI.PropertyScope(position, label, property)
-> ```
->
+### new EditorGUI.PropertyScope(position, label, property)
+
 > 创建一个属性封装器，可用于使常规 GUI 控件与 [SerializedProperty](https://docs.unity3d.com/cn/2018.2/ScriptReference/SerializedProperty.html) 配合使用。
->
+> 
 > 大多数 [EditorGUI](https://docs.unity3d.com/cn/2018.2/ScriptReference/EditorGUI.html) 和 [EditorGUILayout](https://docs.unity3d.com/cn/2018.2/ScriptReference/EditorGUILayout.html) GUI 控件已具有与 SerializedProperty 配合使用的重载。 但是，对于不处理 SerializedProperty 的 GUI 控件，您可以按以下所示示例将它们封装到 BeginProperty 和 EndProperty 中。 您也可以将其用于自己的自定义 GUI 控件。
 >
 > 如果在进行多对象编辑时遇到不同的属性值，BeginProperty 和 EndProperty 会自动处理默认标签、加粗预制件重载的字体、还原为预制件右键单击菜单，并在多对象编辑中涉及不同属性值的情况下，将 ·[showMixedValue](https://docs.unity3d.com/cn/2018.2/ScriptReference/EditorGUI-showMixedValue.html) 设为 true。
