@@ -1,0 +1,9 @@
+在AddressableAssetsData中的Default Local Group设置中的AssetProvider可以看到当前对于资源的处理使用的脚本的名称
+
+默认为BundledAssetProvider(显示为Assets from Bundles Provider)，以及AssetBundleProvider，都是继承了IResourceProvider这个接口，这个接口的所有子类都是对不同的资源加载方式进行封装。
+
+关于Addressables的Relase方法，就可以在AssetBundleProvider中看见，实际上就是调用了对应AssetBundle的Unload函数，需要注意的是默认传入的值为true，所以会切断所有当前使用这个资源的引用。
+
+关于使用Addressables的情况下，需要和Resources.Unload()，Resources.UnloadUnusedAssets()配合使用。
+
+一般来说Addressables都是封装的一层AB，但是无法有AB这么细致的颗粒度，那么假如我有某个预制体中携带了某种Asset，现在我想单独卸载这个Asset而不卸载这个预制体，通过Addressables.Relase()是无法卸载的，这时这个Asset视为一个普通的Unity资源，配合Resources.Unload来切断他的所有引用，再通过Resources.UnloadUnusedAssets来卸载。因为AB和Resources的卸载具体实现都在C++层，无法具体的看到实现，姑且猜测一下，AB加载完后和Resources会比较类似，都有一套引用计数的管理，或者说本质上就是同一个东西，这样Resources才可以卸载AB包。
