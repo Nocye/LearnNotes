@@ -100,8 +100,8 @@
 >
 > 创建一个新的 DisabledScope 并开始相应的组。
 
-> # DisabledScope
->
+### DisabledScope
+
 > struct in UnityEditor
 >
 > ## 描述
@@ -115,10 +115,10 @@
 > 配合using使用
 >
 > ```c#
-> using(new EditorGUI.DisabledScope(bool)){
+>using(new EditorGUI.DisabledScope(bool)){
 > 
 > }
 > 
 > ```
->
+> 
 > 
