@@ -38,3 +38,9 @@ public class EditorListTest : EditorWindow
 > | focus              | 是否赋予窗口焦点（如果已经存在）。 （如果GetWindow创建一个新窗口，它将始终获得焦点）。 |
 >
 > 返回当前屏幕上的第一个T类型的EditorWindow。如果没有，则创建并显示新窗口，并返回它的实例。创建的窗口将尝试停靠在第一个找到的指定窗口类型旁边。
+
+> ```c#
+> private void ShowButton(Rect rect);
+> ```
+>
+> 此方法为Unity消息，可以在EditorWindow的右上角工具栏区域绘制
