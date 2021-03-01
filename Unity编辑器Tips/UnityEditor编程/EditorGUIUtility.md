@@ -27,3 +27,9 @@
 > ```
 >
 > 确认传入的对象是否保存在磁盘上
+
+> ```c#
+> EditorGUIUtility.systemCopyBuffer
+> ```
+>
+> 获取系统剪切板的内容
