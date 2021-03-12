@@ -86,3 +86,59 @@ public static int **SelectionGrid** (int **selected**, GUIContent[] **contents**
 创建一个选择网格。
 
 ![img](https://docs.unity3d.com/cn/2019.4/StaticFiles/ScriptRefImages/GUILayoutSelectionGrid.png)\ *游戏视图中的选择网格。*
+
+
+
+# [GUILayout](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUILayout.html).BeginArea
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**);
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**, string **text**);
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**, [Texture](https://docs.unity3d.com/cn/2019.4/ScriptReference/Texture.html) **image**);
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**, [GUIContent](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIContent.html) **content**);
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**, [GUIStyle](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle.html) **style**);
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**, string **text**, [GUIStyle](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle.html) **style**);
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**, [Texture](https://docs.unity3d.com/cn/2019.4/ScriptReference/Texture.html) **image**, [GUIStyle](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle.html) **style**);
+
+public static void **BeginArea** ([Rect](https://docs.unity3d.com/cn/2019.4/ScriptReference/Rect.html) **screenRect**, [GUIContent](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIContent.html) **content**, [GUIStyle](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle.html) **style**);
+
+## 参数
+
+| text    | （可选）要在该区域中显示的文本。                             |
+| ------- | ------------------------------------------------------------ |
+| image   | （可选）要在该区域中显示的纹理。                             |
+| content | （可选）在该区域顶部显示的文本、图像和工具提示。             |
+| style   | 要使用的样式。如果省略，则使用空 [GUIStyle](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle.html) ([GUIStyle.none](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUIStyle-none.html))，提供透明背景。 |
+
+## 描述
+
+在一个固定的屏幕区域中开始 GUI 控件的 GUILayout 块。
+
+默认情况下，使用 GUILayout 创建的任何 GUI 控件都放置在屏幕的左上角。 若要在任意区域放置一系列自动布局的控件，请使用 GUILayout.BeginArea 为自动布局系统定义要使用的新区域。
+
+简单来说就是防止这个区域中的控件超出这个区域的范围，超出部分不绘制。
+
+另请参阅：[EndArea](https://docs.unity3d.com/cn/2019.4/ScriptReference/GUILayout.EndArea.html)
+
+![img](https://docs.unity3d.com/cn/2019.4/StaticFiles/ScriptRefImages/GUILayoutArea.png)\ *说明示例区域。*
+
+```
+using UnityEngine;public class ExampleScript : MonoBehaviour
+{
+    void OnGUI()
+    {
+        // Starts an area to draw elements
+        GUILayout.BeginArea(new Rect(10, 10, 100, 100));
+        GUILayout.Button("Click me");
+        GUILayout.Button("Or me");
+        GUILayout.EndArea();
+    }
+}
+```
+
+在混合 GUILayout 代码时，该函数非常有用。它必须与 EndArea 调用配对使用。BeginArea/EndArea 不能嵌套。
