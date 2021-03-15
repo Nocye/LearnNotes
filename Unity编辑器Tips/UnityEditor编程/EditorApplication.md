@@ -32,7 +32,11 @@ public static void UnlockReloadAssemblies ();
 
 必须在 LockReloadAssemblies 之后调用，以重新启用程序集的加载过程。(和上面成对出现)
 
+```c#
+EditorApplication.isCompiling
+```
 
+检测当前是否在编译脚本。
 
 # PlayModeStateChange
 
