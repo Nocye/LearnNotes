@@ -15,3 +15,21 @@ public T GetResult();//可以为void,代表一个没有返回值的异步操作
 c#做了一些处理使得await上下文的代码始终跑在同一线程上,原理部分需要之后学习,C#的异步语法和unity的协程是不同的东西,用法也不一样,task不建议你取消,task设计的本意是让阻塞方法不阻塞主线程,停止一个阻塞方法并无意义,unity中除I/O密集的地方外都建议使用自带的协程
 
 使用**TaskCompletionSource**似乎可以对task进行一些操作,后续需要学习
+
+
+
+##### 异步的返回值
+
+当一个返回Task<T>的异步方法中，等待了其他异步操作，且这些异步操作的返回值与T并非同一类型。
+
+```c#
+public async Task<int> Result()
+{
+    await Task.Run<int>(() => { return 10; });
+    await Task.Run<string>(() => { return "123456"; });
+
+    return 10;
+}
+```
+
+初始异步时有一个误解，认为遇见await时，就会返回这个await等待的task，实际并非如此，这个方法在第一个task和第二个task等待返回时依然是返回一个Task<int>，但是这个Task的状态是未完成的 ，暂时无法获得返回值。也就是说这些方法中的task是最外部Task<int>的子task。
