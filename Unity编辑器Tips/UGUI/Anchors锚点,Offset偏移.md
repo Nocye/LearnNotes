@@ -37,7 +37,25 @@ anchorMax.x=当前RectT右方的边和父RectT右方的边的距离
 
 anchorPostision在锚框形态下是通过一个算法计算的，暂时理解以锚框的边缘点到RectT四个点的延长线点为坐标系（这个坐标系是第四象限坐标系，原因未知，也可能是我理解有问题），RectT的Poivot在这个坐标系上的位置。
 
+## anchoredPosition和anchoredPosition3D
+
+在RectTransform面板上，anchoredPosition3D对应了（PosX，PosY，PosZ），anchoredPosition对应了（PosX，PosY）。
+
+当Anchors重合的时候，Anchors与Pivot的相对位置就是anchoredPosition。
+
+![img](Image/v2-4f705ce1c759c56144e80459062a548e_720w.jpg)
+
+当Anchors分开的时候，Pivot在自身区域的比例，映射到Anchors上的点，再与Pivot的相对位置，就是anchoredPosition。
+
+![img](Image/v2-1ebcc5f5ea538c42c0419ed7d7661365_720w.jpg)
+
 #### SizeDelta:
+
+sizeDelta是`offsetMax - offsetMin`的值，它的几何意义是，RectTransform的区域与Anchors区域的差值，所以：
+
+- 如果Anchors重合（区域大小为0），那么差值就是RectTransform的区域本身，此时sizeDelta就是面板上Width和Height的数值。
+- 如果Anchors不重合，那么差值就是两个区域的大小差值，此时sizeDelta就不在是Width和Height的数值，面板上也不再显示Width和Height。
+- 如果RectTransform区域大于Anchors区域，那么sizeDelta就是正值，否则就是负值。
 
 sizeDelta是锚点定义的子矩形与锚点区域大小偏移量，也可以称之为尺寸变化量。
 
