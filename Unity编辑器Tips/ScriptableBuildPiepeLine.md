@@ -1,0 +1,1 @@
+buildcache这个类保存了读取unity内置资源格式的方法
