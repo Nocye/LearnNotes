@@ -59,3 +59,5 @@ rider在碰到导航到DLL内的方法时,从自己的服务器查询有没有�
 ##### 代码清理
 
 **编辑器-Code Cleanup** 可以查看当前的代码清理样式，默认的FullCleanup比较严格，可以选择clone一份自己的，去掉不需要的选项作为日常开发使用。
+
+rider可以自定义自己的代码提示格式，暂时没有用上，Seeting -- Editor -- CodeStyle —C#
