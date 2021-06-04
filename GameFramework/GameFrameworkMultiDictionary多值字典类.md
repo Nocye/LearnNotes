@@ -6,6 +6,10 @@ GameFrameworkLinkedList<T>是GF自己封装的一个链表结构，内部采用�
 
 看一下关键的方法：
 
+初次添加到多值字典中时，首先创建一个链表范围，该值当作头，默认值为尾。
+
+添加已存在key的value时，根据链表的特性，直接把值添加到尾节点之前。
+
 ```c#
 public void Add(TKey key, TValue value)
 {
@@ -24,9 +28,7 @@ public void Add(TKey key, TValue value)
 }
 ```
 
-初次添加到多值字典中时，首先创建一个链表范围，该值当作头，默认值为尾。
-
-添加已存在key的value时，根据链表的特性，直接把值添加到尾节点之前。
+删除节点时需要判断一下是否头节点，如果是头节点就需要重新指定字典中的链表范围
 
 ```c#
 public bool Remove(TKey key, TValue value)
