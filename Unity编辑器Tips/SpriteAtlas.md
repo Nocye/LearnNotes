@@ -17,6 +17,7 @@ Include in Build 选项，非常容易引起歧义，
 SpriteAtlasManager.atlasRequested += (spriteAtlasName, callback) =>
 {
     ab =  AssetBundle.LoadFromFile(Application.streamingAssetsPath + "atlas");
+    //这里申请时,注意只会传入图集的名称,不包含相对路径和后缀,如果你打包时对address做了处理,那么相应的这里也需要做
     var atlas = ab.LoadAsset<SpriteAtlas>(spriteAtlasName);
     callback(atlas);
 };
