@@ -30,6 +30,7 @@ namespace NCoroutine
 
         internal void Complete()
         {
+            isComplete = true;
             awaiter?.Set();
         }
 
@@ -42,8 +43,11 @@ namespace NCoroutine
                 return true;
             }
 
-            ReferencePool.Release(currentWait);
-            currentWait = null;
+            if (currentWait != null)
+            {
+                ReferencePool.Release(currentWait);
+                currentWait = null;
+            }
 
             if (enumerator != null && enumerator.MoveNext())
             {

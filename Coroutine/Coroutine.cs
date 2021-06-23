@@ -7,9 +7,9 @@ namespace NCoroutine
 {
     public static class Coroutine
     {
-        private static readonly List<CoroutineDriver> adds;
-        private static readonly List<CoroutineDriver> handles;
-        private static readonly List<int> removeIndexes;
+        private static readonly List<CoroutineHandle> adds;
+        private static readonly List<CoroutineHandle> handles;
+        private static readonly List<CoroutineHandle> removeIndexes;
         private static List<CoroutineDriver> removes;
         private static CoroutineDevice device;
        // private static readonly Dictionary<CoroutineHandle, float> handless;
@@ -17,9 +17,9 @@ namespace NCoroutine
 
         static Coroutine()
         {
-            handles = new List<CoroutineDriver>(20);
-            removeIndexes = new List<int>(20);
-            adds = new List<CoroutineDriver>(10);
+            handles = new List<CoroutineHandle>(20);
+            removeIndexes = new List<CoroutineHandle>(20);
+            adds = new List<CoroutineHandle>(10);
             waitRemove = new HashSet<CoroutineHandle>();
             GameObject obj = new GameObject() {hideFlags = HideFlags.HideAndDontSave};
             Object.DontDestroyOnLoad(obj);
@@ -30,8 +30,9 @@ namespace NCoroutine
         public static CoroutineHandle Run(IEnumerator cor)
         {
             CoroutineDriver driver = new CoroutineDriver(cor);
-            adds.Add(driver);
-            return new CoroutineHandle() {driver = driver,startTime = Time.unscaledTime};
+            var temp=new CoroutineHandle() {driver = driver,startTime = Time.unscaledTime};
+            adds.Add(temp);
+            return temp;
         }
 
         public static void Stop(CoroutineHandle handle)
@@ -49,17 +50,20 @@ namespace NCoroutine
 
         public static void Update(float deltaTime)
         {
-            for (int i = 0; i < removeIndexes.Count; i++) handles.RemoveAt(removeIndexes[i]);
-
+            for (var i = 0; i < removeIndexes.Count; i++)
+            {
+                removeIndexes[i].driver = null;
+                handles.Remove(removeIndexes[i]);
+            }
             removeIndexes.Clear();
             handles.AddRange(adds);
             adds.Clear();
             for (int i = 0; i < handles.Count; i++)
             {
-                CoroutineDriver temp = handles[i];
-                if (temp.Update(deltaTime)) continue;
-                temp.Complete();
-                removeIndexes.Add(i);
+                CoroutineHandle temp = handles[i];
+                if (temp.driver.Update(deltaTime)) continue;
+                temp.driver.Complete();
+                removeIndexes.Add(temp);
             }
         }
     }

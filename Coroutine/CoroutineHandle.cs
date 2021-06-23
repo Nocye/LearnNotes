@@ -8,6 +8,10 @@ namespace NCoroutine
         internal CoroutineDriver driver;
         internal float startTime;
 
+        internal CoroutineHandle()
+        {
+            
+        }
         internal void SetDriver(CoroutineDriver driver)
         {
             this.driver = driver;

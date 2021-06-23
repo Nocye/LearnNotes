@@ -5,7 +5,15 @@
         public static CoroutineAwaiter GetAwaiter(this CoroutineHandle handle)
         {
             var awaiter = new CoroutineAwaiter();
-            handle.driver.awaiter = awaiter;
+            if (handle.driver != null && !handle.driver.isComplete)
+            {
+                handle.driver.awaiter = awaiter;
+            }
+            else if (handle.driver == null || handle.driver.isComplete)
+            {
+                awaiter.Set();
+            }
+
             return awaiter;
         }
     }
