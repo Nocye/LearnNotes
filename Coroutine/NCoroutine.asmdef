@@ -1,0 +1,16 @@
+{
+    "name": "NCoroutine",
+    "rootNamespace": "NCoroutine",
+    "references": [
+        "GUID:2f3c30e80579d0c4a9dc6c4d16edd4c8"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
