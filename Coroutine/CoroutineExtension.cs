@@ -1,9 +1,16 @@
-﻿namespace NCoroutine
+﻿using System;
+
+namespace NCoroutine
 {
-    public static class CorouotineExtension
+    public static class CoroutineExtension
     {
         public static CoroutineAwaiter GetAwaiter(this CoroutineHandle handle)
         {
+            if (handle == null)
+            {
+                throw new ArgumentException("handle is null");
+            }
+
             CoroutineAwaiter awaiter = new CoroutineAwaiter();
             if (handle.driver is {isComplete: false})
             {
@@ -11,7 +18,7 @@
             }
             else if (handle.driver == null || handle.driver.isComplete)
             {
-                awaiter.Set();
+                awaiter.Complete();
             }
 
             return awaiter;

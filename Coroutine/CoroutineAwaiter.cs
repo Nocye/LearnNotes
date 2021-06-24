@@ -26,7 +26,7 @@ namespace NCoroutine
         {
         }
 
-        internal void Set()
+        internal void Complete()
         {
             isComplete = true;
             onComplete?.Invoke();
