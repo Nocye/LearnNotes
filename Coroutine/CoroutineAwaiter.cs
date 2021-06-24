@@ -7,20 +7,10 @@ namespace NCoroutine
     [StructLayout(LayoutKind.Auto)]
     public class CoroutineAwaiter : ICriticalNotifyCompletion
     {
-        public void GetResult()
-        {
-           
-        }
+        private bool isComplete;
+        private Action onComplete;
 
         public bool IsCompleted => isComplete;
-        private Action onComplete;
-        private bool isComplete;
-
-        internal void Set()
-        {
-            isComplete = true;
-            onComplete?.Invoke();
-        }
 
         public void OnCompleted(Action continuation)
         {
@@ -30,6 +20,16 @@ namespace NCoroutine
         public void UnsafeOnCompleted(Action continuation)
         {
             onComplete = continuation;
+        }
+
+        public void GetResult()
+        {
+        }
+
+        internal void Set()
+        {
+            isComplete = true;
+            onComplete?.Invoke();
         }
     }
 }

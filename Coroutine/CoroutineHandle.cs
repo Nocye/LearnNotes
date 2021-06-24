@@ -7,27 +7,23 @@ namespace NCoroutine
     {
         internal CoroutineDriver driver;
         internal float startTime;
-
-        internal CoroutineHandle()
-        {
-            
-        }
-        internal void SetDriver(CoroutineDriver driver)
-        {
-            this.driver = driver;
-        }
-
-        public void Clear()
-        {
-            driver = null;
-        }
-
-
         public bool Equals(CoroutineHandle other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return Equals(driver, other.driver) && startTime.Equals(other.startTime);
+        }
+
+        public void Clear()
+        {
+            driver = null;
+            startTime = 0;
+        }
+
+        internal void SetDriver(CoroutineDriver driver, float startTime)
+        {
+            this.driver = driver;
+            this.startTime = startTime;
         }
 
         public override bool Equals(object obj)

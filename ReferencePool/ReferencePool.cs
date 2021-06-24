@@ -13,6 +13,12 @@ namespace NReferencePool
             return GetReferenceCollection(typeof(T)).Acquire<T>();
         }
 
+        public static IReference Acquire(Type referenceType)
+        {
+            InternalCheckReferenceType(referenceType);
+            return GetReferenceCollection(referenceType).Acquire();
+        }
+
         public static void Release(IReference reference)
         {
             Type referenceType = reference.GetType();

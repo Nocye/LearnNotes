@@ -11,7 +11,7 @@ namespace NReferencePool
 
         public ReferenceCollection(Type referenceType)
         {
-            references = new Queue<IReference>();
+            references = new Queue<IReference>(4);
             this.referenceType = referenceType;
             checkType = true;
         }
@@ -23,6 +23,12 @@ namespace NReferencePool
             if (references.Count > 0) return (T) references.Dequeue();
 
             return new T();
+        }
+
+        public IReference Acquire()
+        {
+            if (references.Count > 0) return references.Dequeue();
+            return (IReference) Activator.CreateInstance(referenceType);
         }
 
         public void Release(IReference reference)

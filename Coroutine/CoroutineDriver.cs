@@ -37,12 +37,13 @@ namespace NCoroutine
 
         internal bool Update(float deltaTime)
         {
-            if (currentWait != null && !currentWait.IsComplete)
+            if (currentWait is {IsComplete: false})
             {
                 currentWait.Update(deltaTime);
                 return true;
             }
 
+          
             if (currentWait != null)
             {
                 ReferencePool.Release(currentWait);
@@ -58,22 +59,25 @@ namespace NCoroutine
                         tempTimer.SetTime(wait);
                         currentWait = tempTimer;
                         break;
+                    case BaseWait customWait:
+                        WaitCustom tempCustom = ReferencePool.Acquire<WaitCustom>();
+                        tempCustom.SetCustom(customWait);
+                        currentWait = tempCustom;
+                        break;
                     case UnityEngine.AsyncOperation operation:
                         WaitOperation tempOperation = ReferencePool.Acquire<WaitOperation>();
                         tempOperation.SetOperation(operation);
                         currentWait = tempOperation;
                         break;
                     case CoroutineHandle handle:
-                        WaitDriver tempDriver = ReferencePool.Acquire<WaitDriver>();
-                        tempDriver.SetDriver(handle.driver);
-                        currentWait = tempDriver;
+                        WaitInternalDriver tempInternalDriver = ReferencePool.Acquire<WaitInternalDriver>();
+                        tempInternalDriver.SetDriver(handle.driver);
+                        currentWait = tempInternalDriver;
                         break;
                     case IEnumerator nestedEnumerator:
                         linkedList.AddFirst(nestedEnumerator);
                         break;
-                    case int _:
-                    case float _:
-                    case null:
+                    default:
                         break;
                 }
 

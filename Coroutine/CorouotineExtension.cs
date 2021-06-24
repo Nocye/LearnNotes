@@ -4,8 +4,8 @@
     {
         public static CoroutineAwaiter GetAwaiter(this CoroutineHandle handle)
         {
-            var awaiter = new CoroutineAwaiter();
-            if (handle.driver != null && !handle.driver.isComplete)
+            CoroutineAwaiter awaiter = new CoroutineAwaiter();
+            if (handle.driver is {isComplete: false})
             {
                 handle.driver.awaiter = awaiter;
             }

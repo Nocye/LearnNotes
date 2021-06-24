@@ -7,12 +7,13 @@ namespace NCoroutine
 {
     public static class Coroutine
     {
+        //这里最优的存储应该是参考dotweene内部的数组方式
         private static readonly List<CoroutineHandle> adds;
         private static readonly List<CoroutineHandle> handles;
         private static readonly List<CoroutineHandle> removeIndexes;
         private static List<CoroutineDriver> removes;
-        private static CoroutineDevice device;
-       // private static readonly Dictionary<CoroutineHandle, float> handless;
+
+        private static readonly CoroutineDevice device;
         private static readonly HashSet<CoroutineHandle> waitRemove;
 
         static Coroutine()
@@ -21,7 +22,7 @@ namespace NCoroutine
             removeIndexes = new List<CoroutineHandle>(20);
             adds = new List<CoroutineHandle>(10);
             waitRemove = new HashSet<CoroutineHandle>();
-            GameObject obj = new GameObject() {hideFlags = HideFlags.HideAndDontSave};
+            GameObject obj = new GameObject {hideFlags = HideFlags.HideAndDontSave};
             Object.DontDestroyOnLoad(obj);
             device = obj.AddComponent<CoroutineDevice>();
             device.coroutineUpdate += Update;
@@ -30,31 +31,30 @@ namespace NCoroutine
         public static CoroutineHandle Run(IEnumerator cor)
         {
             CoroutineDriver driver = new CoroutineDriver(cor);
-            var temp=new CoroutineHandle() {driver = driver,startTime = Time.unscaledTime};
-            adds.Add(temp);
-            return temp;
+            var handle = ReferencePool.Acquire<CoroutineHandle>();
+            handle.SetDriver(driver, Time.time);
+            adds.Add(handle);
+            return handle;
         }
 
         public static void Stop(CoroutineHandle handle)
         {
             if (handle != null)
             {
-                if (!removes.Contains(handle.driver))
-                {
-                    removes.Add(handle.driver);
-                }
-
-                handle.driver = null;
+                if (!removes.Contains(handle.driver)) removes.Add(handle.driver);
             }
         }
 
-        public static void Update(float deltaTime)
+        private static void Update(float deltaTime)
         {
-            for (var i = 0; i < removeIndexes.Count; i++)
+            for (int i = 0; i < removeIndexes.Count; i++)
             {
-                removeIndexes[i].driver = null;
+                //removeIndexes[i].driver = null;
                 handles.Remove(removeIndexes[i]);
+                ReferencePool.Release(removeIndexes[i]);
             }
+            
+
             removeIndexes.Clear();
             handles.AddRange(adds);
             adds.Clear();
@@ -69,44 +69,60 @@ namespace NCoroutine
     }
 
 
-    internal interface IWaitable : IReference
+    internal class WaitInternalDriver : IWaitable
     {
-        bool IsComplete { get; }
-        void Update(float deltaTime);
-    }
+        private CoroutineDriver driver;
 
-    internal class WaitDriver : IWaitable
-    {
-        internal CoroutineDriver Driver;
-
-        public bool IsComplete => Driver.isComplete;
+        public bool IsComplete => driver.isComplete;
 
         void IWaitable.Update(float deltaTime)
         {
         }
 
-        public void Clear()
+        void IReference.Clear()
         {
-            Driver = null;
+            driver = null;
         }
 
         internal void SetDriver(CoroutineDriver driver)
         {
-            Driver = driver;
+            this.driver = driver;
+        }
+    }
+
+    internal class WaitCustom : IWaitable
+    {
+        private BaseWait baseWait;
+
+        void IReference.Clear()
+        {
+            baseWait = null;
+        }
+
+        public bool IsComplete => baseWait.IsCompleted;
+
+        void IWaitable.Update(float deltaTime)
+        {
+            baseWait?.Update(deltaTime);
+        }
+
+        internal void SetCustom(BaseWait baseWait)
+        {
+            this.baseWait = baseWait;
         }
     }
 
     internal class WaitOperation : IWaitable
     {
         private bool isDone;
-        internal AsyncOperation operation;
+        private AsyncOperation operation;
         public bool IsComplete => isDone;
 
         void IWaitable.Update(float deltaTime)
         {
         }
 
-        public void Clear()
+        void IReference.Clear()
         {
             operation = null;
             isDone = false;
@@ -126,9 +142,8 @@ namespace NCoroutine
 
     internal class WaitTimer : IWaitable
     {
-        internal float duration;
-        internal float elapsedTime;
-        internal WaitForTime time;
+        private float elapsedTime;
+        private WaitForTime time;
 
         public bool IsComplete => elapsedTime >= time.duration;
 
@@ -137,11 +152,10 @@ namespace NCoroutine
             if (!IsComplete) elapsedTime += deltaTime;
         }
 
-        public void Clear()
+        void IReference.Clear()
         {
             elapsedTime = 0;
             time = null;
-            duration = 0;
         }
 
         internal void SetTime(WaitForTime time)
