@@ -4,18 +4,25 @@ using NReferencePool;
 
 namespace NCoroutine
 {
-    internal class CoroutineDriver
+    internal sealed class CoroutineDriver : IReference
     {
-        private readonly LinkedList<IEnumerator> linkedList;
+        private LinkedList<IEnumerator> linkedList;
         internal CoroutineAwaiter awaiter;
-
+        internal CoroutineHandle handle;
         internal IWaitable currentWait;
         internal bool isComplete;
-
-        public CoroutineDriver(IEnumerator enumerator)
+        public CoroutineDriver()
         {
             linkedList = new LinkedList<IEnumerator>();
-            linkedList.AddFirst(enumerator);
+        }
+
+        public static CoroutineDriver CreateDriver(IEnumerator enumerator,CoroutineHandle handle)
+        {
+            CoroutineDriver driver = ReferencePool.Acquire<CoroutineDriver>();
+            driver.linkedList.AddFirst(enumerator);
+            driver.handle = handle;
+            driver.isComplete = false;
+            return driver;
         }
 
         internal IEnumerator enumerator
@@ -28,10 +35,12 @@ namespace NCoroutine
             }
         }
 
-        internal void Complete()
+        public void Clear()
         {
-            isComplete = true;
-            awaiter?.Set();
+            linkedList.Clear();
+            awaiter = null;
+            handle = null;
+            currentWait = null;
         }
 
 
@@ -43,7 +52,7 @@ namespace NCoroutine
                 return true;
             }
 
-          
+
             if (currentWait != null)
             {
                 ReferencePool.Release(currentWait);
@@ -54,25 +63,17 @@ namespace NCoroutine
             {
                 switch (enumerator.Current)
                 {
-                    case WaitForTime wait:
-                        WaitTimer tempTimer = ReferencePool.Acquire<WaitTimer>();
-                        tempTimer.SetTime(wait);
-                        currentWait = tempTimer;
+                    case WaitForTime waitForTime:
+                        currentWait = WaitTimer.Create(waitForTime);
                         break;
                     case BaseWait customWait:
-                        WaitCustom tempCustom = ReferencePool.Acquire<WaitCustom>();
-                        tempCustom.SetCustom(customWait);
-                        currentWait = tempCustom;
+                        currentWait = WaitCustom.Create(customWait);
                         break;
                     case UnityEngine.AsyncOperation operation:
-                        WaitOperation tempOperation = ReferencePool.Acquire<WaitOperation>();
-                        tempOperation.SetOperation(operation);
-                        currentWait = tempOperation;
+                        currentWait = WaitOperation.Create(operation);
                         break;
-                    case CoroutineHandle handle:
-                        WaitInternalDriver tempInternalDriver = ReferencePool.Acquire<WaitInternalDriver>();
-                        tempInternalDriver.SetDriver(handle.driver);
-                        currentWait = tempInternalDriver;
+                    case CoroutineHandle coroutineHandle:
+                        currentWait = WaitInternalDriver.Create(coroutineHandle.driver);
                         break;
                     case IEnumerator nestedEnumerator:
                         linkedList.AddFirst(nestedEnumerator);
