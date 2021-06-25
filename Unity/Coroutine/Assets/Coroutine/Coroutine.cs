@@ -40,8 +40,9 @@ namespace NCoroutine
 
         public static void Stop(CoroutineHandle handle)
         {
-            if (handle.driver == null) return;
+            if (handle?.driver == null ) return;
             removes.Add(handle.driver);
+            handle.driver = null;
         }
 
         private static void RemoveCoroutine()
@@ -51,7 +52,6 @@ namespace NCoroutine
                 handles.Remove(driver);
                 ReferencePool.Release(driver);
             }
-
             removes.Clear();
         }
 
