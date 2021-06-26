@@ -1,97 +1,88 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NReferencePool;
+using UnityEngine;
 
 namespace NCoroutine
 {
     internal sealed class CoroutineDriver : IReference
     {
-        private LinkedList<IEnumerator> linkedList;
         internal CoroutineAwaiter awaiter;
+
+        internal IEnumerator enumerator;
+
         internal CoroutineHandle handle;
-        internal IWaitable currentWait;
+
         internal bool isComplete;
+
+        private readonly Stack<IEnumerator> waitEnumerators;
+
         public CoroutineDriver()
         {
-            linkedList = new LinkedList<IEnumerator>();
+            waitEnumerators = new Stack<IEnumerator>(4);
         }
 
-        public static CoroutineDriver CreateDriver(IEnumerator enumerator,CoroutineHandle handle)
+        internal void Completed()
+        {
+            handle.driver = null;
+            awaiter?.Complete();
+            isComplete = true;
+            ReferencePool.Release(this);
+        }
+        public void Clear()
+        {
+            handle = null;
+            awaiter = null;
+            enumerator = null;
+            waitEnumerators.Clear();
+        }
+
+        public static CoroutineDriver Create(IEnumerator enumerator, CoroutineHandle handle)
         {
             CoroutineDriver driver = ReferencePool.Acquire<CoroutineDriver>();
-            driver.linkedList.AddFirst(enumerator);
+            driver.enumerator = enumerator;
             driver.handle = handle;
             driver.isComplete = false;
             return driver;
         }
 
-        internal IEnumerator enumerator
-        {
-            get
-            {
-                if (linkedList.Count > 0) return linkedList.First.Value;
-
-                return null;
-            }
-        }
-
-        public void Clear()
-        {
-            linkedList.Clear();
-            awaiter = null;
-            handle = null;
-            currentWait = null;
-        }
-
 
         internal bool Update(float deltaTime)
         {
-            if (currentWait is {IsComplete: false})
-            {
-                currentWait.Update(deltaTime);
-                return true;
-            }
-
-
-            if (currentWait != null)
-            {
-                ReferencePool.Release(currentWait);
-                currentWait = null;
-            }
-
-            if (enumerator != null && enumerator.MoveNext())
+            if (enumerator.MoveNext())
             {
                 switch (enumerator.Current)
                 {
                     case WaitForTime waitForTime:
-                        currentWait = WaitTimer.Create(waitForTime);
+                        waitEnumerators.Push(enumerator);
+                        enumerator = WaitTimer.Create(waitForTime);
                         break;
                     case BaseWait customWait:
-                        currentWait = WaitCustom.Create(customWait);
+                        waitEnumerators.Push(enumerator);
+                        enumerator = WaitCustom.Create(customWait);
                         break;
-                    case UnityEngine.AsyncOperation operation:
-                        currentWait = WaitOperation.Create(operation);
+                    case AsyncOperation operation:
+                        waitEnumerators.Push(enumerator);
+                        enumerator = WaitOperation.Create(operation);
                         break;
                     case CoroutineHandle coroutineHandle:
-                        currentWait = WaitInternalDriver.Create(coroutineHandle.driver);
+                        waitEnumerators.Push(enumerator);
+                        enumerator = WaitInternalDriver.Create(coroutineHandle.driver);
                         break;
                     case IEnumerator nestedEnumerator:
-                        linkedList.AddFirst(nestedEnumerator);
-                        break;
-                    default:
+                        waitEnumerators.Push(enumerator);
+                        enumerator = nestedEnumerator;
                         break;
                 }
 
                 return true;
             }
 
-            if (linkedList.Count > 0)
-            {
-                linkedList.RemoveFirst();
-                return true;
-            }
+            if (enumerator is IWaitable waitable) ReferencePool.Release(waitable);
 
-            return false;
+            if (waitEnumerators.Count <= 0) return false;
+            enumerator = waitEnumerators.Pop();
+            return true;
         }
     }
 }

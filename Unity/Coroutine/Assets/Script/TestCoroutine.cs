@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using NCoroutine;
+using NReferencePool;
 using UnityEngine;
+using UnityEngine.Networking;
 using Coroutine = NCoroutine.Coroutine;
 
 namespace DefaultNamespace
@@ -9,10 +11,29 @@ namespace DefaultNamespace
     {
         public GameObject Obj;
         private CoroutineHandle handle;
+        private float timer;
 
         private void Start()
         {
             //Coroutine.Run(WaitMove());
+           dayuhandle= Coroutine.Run(WaitTime());
+        }
+
+        private bool Dayu()
+        {
+            timer += Time.deltaTime;
+            return timer < 2f;
+        }
+
+        private CoroutineHandle dayuhandle;
+        private IEnumerator WaitTime()
+        {
+            var temp = WaitPredicate.Create(Dayu);
+            Debug.Log($"start Time {Time.time}");
+            yield return temp;
+            Debug.Log($"end time {Time.time}");
+            ReferencePool.Release(temp);
+            Coroutine.Stop(dayuhandle);
         }
 
         private void OnGUI()

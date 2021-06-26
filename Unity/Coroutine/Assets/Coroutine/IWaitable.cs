@@ -1,8 +1,8 @@
-﻿namespace NCoroutine
+﻿using System.Collections;
+
+namespace NCoroutine
 {
-    internal interface IWaitable : NReferencePool.IReference
+    internal interface IWaitable : NReferencePool.IReference ,IEnumerator
     {
-        bool IsComplete { get; }
-        void Update(float deltaTime);
     }
 }
