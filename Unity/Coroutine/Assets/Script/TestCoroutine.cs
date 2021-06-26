@@ -16,7 +16,7 @@ namespace DefaultNamespace
         private void Start()
         {
             //Coroutine.Run(WaitMove());
-           dayuhandle= Coroutine.Run(WaitTime());
+            dayuhandle = Coroutine.Run(WaitTime());
         }
 
         private bool Dayu()
@@ -26,6 +26,7 @@ namespace DefaultNamespace
         }
 
         private CoroutineHandle dayuhandle;
+
         private IEnumerator WaitTime()
         {
             var temp = WaitPredicate.Create(Dayu);
@@ -42,11 +43,20 @@ namespace DefaultNamespace
             Rect doMoveRect = new Rect(Vector2.zero, buttonSize);
             Rect waitMoveRect = new Rect(new Vector2(0, doMoveRect.y + 100), buttonSize);
             Rect stopRect = new Rect(new Vector2(0, waitMoveRect.y + 100), buttonSize);
+            Rect asyncRect = new Rect(new Vector2(0, stopRect.y + 100), buttonSize);
             if (GUI.Button(doMoveRect, "DoMove")) handle = Coroutine.Run(DoMove(Obj.transform.position.x, 5, 2));
 
             if (GUI.Button(waitMoveRect, "WaitDoMoveAndBack")) handle = Coroutine.Run(WaitMove());
 
             if (GUI.Button(stopRect, "Stop")) Coroutine.Stop(handle);
+            if (GUI.Button(asyncRect, "await")) RunAsync();
+        }
+
+        private async void RunAsync()
+        {
+            await Coroutine.Run(DoMove(1, 3, 3));
+            await Coroutine.Run(WaitMove());
+            Debug.Log("Wait Completed");
         }
 
         private IEnumerator DoMove(float start, float end, float duration)
