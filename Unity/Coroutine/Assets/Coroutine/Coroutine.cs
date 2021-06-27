@@ -31,7 +31,7 @@ namespace NCoroutine
         {
             CoroutineHandle handle = new CoroutineHandle();
             CoroutineDriver driver = CoroutineDriver.Create(cor, handle);
-            handle.SetDriver(driver, Time.time);
+            handle.driver = driver;
             waitAdds.Add(driver);
             return handle;
         }
@@ -39,20 +39,23 @@ namespace NCoroutine
         public static void Stop(CoroutineHandle handle)
         {
             if (handle?.driver == null) return;
-            waitRemoves.Add(handle.driver);
+            EndCoroutine(handle.driver);
+            handle.driver.Completed();
             handle.driver = null;
+        }
+
+        private static void EndCoroutine(CoroutineDriver driver)
+        {
+            waitRemoves.Add(driver);
         }
 
         private static void RemoveCoroutine()
         {
-            //删除时注意,如果使用者在协程中停止自己,会重复添加到Removes列表中,目前暂时用逻辑判断,考虑是否改为HashSet
+            //删除时注意,如果使用者在协程中停止自己,会重复添加到Removes列表中,目前用逻辑判断
             foreach (CoroutineDriver driver in waitRemoves)
             {
                 drivers.Remove(driver);
-                if (!driver.isComplete)
-                {
-                    driver.Completed();
-                }
+                if (!driver.isComplete) driver.Completed();
             }
 
             waitRemoves.Clear();
@@ -70,9 +73,16 @@ namespace NCoroutine
             AddCoroutine();
             foreach (CoroutineDriver driver in drivers)
             {
-                if (driver.Update(deltaTime)) continue;
-                //driver.Completed();
-                waitRemoves.Add(driver);
+                //轮询,如果协程结束就立即完成,下一帧从列表中移除
+                //if (!driver.isComplete && driver.Update(deltaTime)) continue;
+                if (!driver.isComplete)
+                {
+                    if (driver.Update(deltaTime))
+                        continue;
+                    driver.Completed();
+                }
+
+                EndCoroutine(driver);
             }
         }
     }

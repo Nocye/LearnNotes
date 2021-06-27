@@ -25,8 +25,8 @@ namespace NCoroutine
         internal void Completed()
         {
             handle.driver = null;
-            awaiter?.Complete();
             isComplete = true;
+            awaiter?.Complete();
             ReferencePool.Release(this);
         }
         public void Clear()
