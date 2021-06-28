@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Threading.Tasks;
 using NCoroutine;
 using NReferencePool;
 using UnityEngine;
 using UnityEngine.Networking;
 using Coroutine = NCoroutine.Coroutine;
+using Random = UnityEngine.Random;
 
 namespace DefaultNamespace
 {
@@ -12,11 +15,13 @@ namespace DefaultNamespace
         public GameObject Obj;
 
         private CoroutineHandle dayuhandle;
+        private CoroutineGroup group;
         private CoroutineHandle handle;
         private float timer;
 
         private void Start()
         {
+            group = CoroutineGroup.Create(new Func<IEnumerator>[] {Group1, Group2, Group3});
         }
 
         private void Update()
@@ -25,21 +30,65 @@ namespace DefaultNamespace
 
         private void OnGUI()
         {
-            Vector2 buttonSize = new Vector2(200, 100);
+            Vector2 buttonSize = new Vector2(200, 50);
             Rect doMoveRect = new Rect(Vector2.zero, buttonSize);
-            Rect waitMoveRect = new Rect(new Vector2(0, doMoveRect.y + 100), buttonSize);
-            Rect stopRect = new Rect(new Vector2(0, waitMoveRect.y + 100), buttonSize);
-            Rect asyncRect = new Rect(new Vector2(0, stopRect.y + 100), buttonSize);
-            Rect cancelNowRect = new Rect(new Vector2(0, asyncRect.y + 100), buttonSize);
-            Rect operationRect = new Rect(new Vector2(0, cancelNowRect.y + 100), buttonSize);
+            Rect waitMoveRect = new Rect(new Vector2(0, doMoveRect.y + 50), buttonSize);
+            Rect stopRect = new Rect(new Vector2(0, waitMoveRect.y + 50), buttonSize);
+            Rect asyncRect = new Rect(new Vector2(0, stopRect.y + 50), buttonSize);
+            Rect cancelNowRect = new Rect(new Vector2(0, asyncRect.y + 50), buttonSize);
+            Rect operationRect = new Rect(new Vector2(0, cancelNowRect.y + 50), buttonSize);
+            Rect groupAnyRect = new Rect(new Vector2(0, operationRect.y + 50), buttonSize);
+            Rect groupAllRect = new Rect(new Vector2(0, groupAnyRect.y + 50), buttonSize);
             if (GUI.Button(doMoveRect, "DoMove")) handle = Coroutine.Run(DoMove(Obj.transform.position.x, 5, 2));
 
             if (GUI.Button(waitMoveRect, "WaitDoMoveAndBack")) handle = Coroutine.Run(WaitMove());
 
             if (GUI.Button(stopRect, "StopMove")) Coroutine.Stop(handle);
-            if (GUI.Button(asyncRect, "await")) RunAsync();
+            if (GUI.Button(asyncRect, "Use Await")) RunAsync();
             if (GUI.Button(cancelNowRect, "Cancel Now")) CancelNow();
             if (GUI.Button(operationRect, "Operation")) Coroutine.Run(Operation());
+            if (GUI.Button(groupAnyRect, "GroupWaitAny")) Coroutine.Run(GroupWaitAny());
+
+            if (GUI.Button(groupAllRect, "GroupWaitAll")) Coroutine.Run(GroupWaitAll());
+        }
+
+        private IEnumerator Group1()
+        {
+            yield return new WaitForTime(Random.Range(0,1));
+            Debug.Log(nameof(Group1));
+        }
+
+        private IEnumerator Group2()
+        {
+            float duration = 2;
+            float elapsedTime = 0f;
+            while (elapsedTime < duration)
+            {
+                float value = Mathf.Lerp(0, 2, elapsedTime / 2);
+                yield return null;
+                elapsedTime += Time.deltaTime;
+            }
+
+            Debug.Log(elapsedTime);
+        }
+
+        private IEnumerator Group3()
+        {
+            yield return Operation();
+        }
+
+        private IEnumerator GroupWaitAny()
+        {
+            yield return group.Run().WaitAny();
+            Debug.Log("WaitAny");
+            yield return @group.WaitAll();
+            Debug.Log("all");
+        }
+
+        private IEnumerator GroupWaitAll()
+        {
+            yield return group.Run().WaitAll();
+            Debug.Log("WaitAll");
         }
 
         private IEnumerator Operation()
@@ -62,7 +111,7 @@ namespace DefaultNamespace
             Debug.Log("VAR");
         }
 
-        private bool Dayu()
+        private bool Predicate()
         {
             timer += Time.deltaTime;
             return timer < 2f;
@@ -70,7 +119,7 @@ namespace DefaultNamespace
 
         private IEnumerator WaitTime()
         {
-            WaitPredicate temp = WaitPredicate.Create(Dayu);
+            WaitPredicate temp = WaitPredicate.Create(Predicate);
             Debug.Log($"start Time {Time.time}");
             yield return temp;
             Debug.Log($"end time {Time.time}");

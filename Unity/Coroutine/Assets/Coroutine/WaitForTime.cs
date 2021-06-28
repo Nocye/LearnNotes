@@ -1,4 +1,7 @@
-﻿namespace NCoroutine
+﻿using System;
+using UnityEngine;
+
+namespace NCoroutine
 {
     public sealed class WaitForTime
     {
@@ -7,7 +10,7 @@
 
         public WaitForTime(float duration, bool ignoreTimeScale = true)
         {
-            this.duration = duration;
+            this.duration = Mathf.Max(0,duration);
             this.ignoreTimeScale = ignoreTimeScale;
         }
     }
