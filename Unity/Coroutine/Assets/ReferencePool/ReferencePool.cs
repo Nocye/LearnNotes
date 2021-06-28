@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NReferencePool
 {
-    public static class ReferencePool
+    public static partial class ReferencePool
     {
         private static readonly Dictionary<Type, ReferenceCollection> referenceCollections =
             new Dictionary<Type, ReferenceCollection>();
