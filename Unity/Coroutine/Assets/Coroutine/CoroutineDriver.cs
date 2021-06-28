@@ -29,6 +29,7 @@ namespace NCoroutine
             awaiter?.Complete();
             ReferencePool.Release(this);
         }
+
         public void Clear()
         {
             handle = null;
@@ -53,13 +54,11 @@ namespace NCoroutine
             {
                 switch (enumerator.Current)
                 {
+                    case null:
+                        break;
                     case WaitForTime waitForTime:
                         waitEnumerators.Push(enumerator);
                         enumerator = WaitTimer.Create(waitForTime);
-                        break;
-                    case BaseWait customWait:
-                        waitEnumerators.Push(enumerator);
-                        enumerator = WaitCustom.Create(customWait);
                         break;
                     case AsyncOperation operation:
                         waitEnumerators.Push(enumerator);
@@ -68,6 +67,10 @@ namespace NCoroutine
                     case CoroutineHandle coroutineHandle:
                         waitEnumerators.Push(enumerator);
                         enumerator = WaitInternalDriver.Create(coroutineHandle.driver);
+                        break;
+                    case BaseWait customWait:
+                        waitEnumerators.Push(enumerator);
+                        enumerator = WaitCustom.Create(customWait);
                         break;
                     case IEnumerator nestedEnumerator:
                         waitEnumerators.Push(enumerator);
