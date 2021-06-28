@@ -18,10 +18,34 @@ namespace DefaultNamespace
         private CoroutineGroup group;
         private CoroutineHandle handle;
         private float timer;
+        private UnityEngine.Coroutine uc;
 
         private void Start()
         {
             group = CoroutineGroup.Create(new Func<IEnumerator>[] {Group1, Group2, Group3});
+            dayuhandle =  Coroutine.Run(TestCancel());
+        }
+
+        private async void Runnn()
+        {
+            Debug.Log(Time.frameCount);
+
+            await Coroutine.Run(TestCancel());
+            Debug.Log(Time.frameCount);
+        }
+
+        private IEnumerator TestCancel()
+        {
+            yield return new WaitForTime(0.5f);
+            Coroutine.Stop(dayuhandle);
+            Debug.Log("0.5f");
+        }
+
+        private IEnumerator cccan()
+        {
+            yield return new WaitForTime(0.5f);
+            Debug.Log("2D");
+            yield break;
         }
 
         private void Update()
@@ -54,7 +78,7 @@ namespace DefaultNamespace
 
         private IEnumerator Group1()
         {
-            yield return new WaitForTime(Random.Range(0,1));
+            yield return new WaitForTime(Random.Range(0, 1));
             Debug.Log(nameof(Group1));
         }
 
@@ -101,8 +125,8 @@ namespace DefaultNamespace
 
         private void CancelNow()
         {
-            CoroutineHandle h = Coroutine.Run(Cancel());
-            Coroutine.Stop(h);
+            dayuhandle = Coroutine.Run(TestCancel());
+            //Coroutine.Stop(h);
         }
 
         private IEnumerator Cancel()

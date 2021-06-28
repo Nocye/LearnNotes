@@ -7,7 +7,7 @@ namespace NCoroutine
 {
     internal sealed class CoroutineDriver : IReference
     {
-        internal CoroutineAwaiter awaiter;
+        //internal CoroutineAwaiter awaiter;
 
         internal IEnumerator enumerator;
 
@@ -26,14 +26,11 @@ namespace NCoroutine
         {
             handle.driver = null;
             isComplete = true;
-            awaiter?.Complete();
-            ReferencePool.Release(this);
         }
 
         public void Clear()
         {
             handle = null;
-            awaiter = null;
             enumerator = null;
             waitEnumerators.Clear();
         }
@@ -52,6 +49,8 @@ namespace NCoroutine
         {
             if (enumerator.MoveNext())
             {
+                //这里判断只有一种情况为真,协程在内部自己停止自己
+           
                 switch (enumerator.Current)
                 {
                     case null:

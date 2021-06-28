@@ -14,7 +14,7 @@ namespace NCoroutine
             CoroutineAwaiter awaiter = new CoroutineAwaiter();
             if (handle.driver is {isComplete: false})
             {
-                handle.driver.awaiter = awaiter;
+                handle.awaiter = awaiter;
             }
             else if (handle.driver == null || handle.driver.isComplete)
             {

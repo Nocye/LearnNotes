@@ -30,6 +30,7 @@ namespace NCoroutine
         {
             isComplete = true;
             onComplete?.Invoke();
+            onComplete = null;
         }
     }
 }

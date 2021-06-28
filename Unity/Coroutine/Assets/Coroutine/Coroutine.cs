@@ -39,29 +39,24 @@ namespace NCoroutine
         public static void Stop(CoroutineHandle handle)
         {
             if (handle?.driver == null) return;
-            //EndCoroutine(handle.driver);
-            //handle.driver.Completed();
             InternalStop(handle.driver);
         }
 
         private static void InternalStop(CoroutineDriver driver)
         {
-            EndCoroutine(driver);
-            driver.Completed();
+            if (!driver.isComplete)
+            {
+                driver.Completed();
+                waitRemoves.Add(driver);
+                driver.handle.awaiter?.Complete();
+            }
         }
-
-        private static void EndCoroutine(CoroutineDriver driver)
-        {
-            waitRemoves.Add(driver);
-        }
-
         private static void RemoveCoroutine()
         {
-            //删除时注意,如果使用者在协程中停止自己,会重复添加到Removes列表中,目前用逻辑判断
             foreach (CoroutineDriver driver in waitRemoves)
             {
                 drivers.Remove(driver);
-                //if (!driver.isComplete) driver.Completed();
+                ReferencePool.Release(driver);
             }
 
             waitRemoves.Clear();
@@ -80,16 +75,13 @@ namespace NCoroutine
             foreach (CoroutineDriver driver in drivers)
             {
                 //轮询,如果协程结束就立即完成,下一帧从列表中移除
-                //如果在协程中停止一个协程,这个协程先于被停止的协程运行,就会导致仍在列表内,但以完成的状态,需要判断一下
+                //如果在协程中停止一个协程,这个协程先于被停止的协程运行,就会导致仍在列表内,但是以完成的状态,需要判断一下
                 if (!driver.isComplete)
                 {
                     if (driver.Update(deltaTime))
                         continue;
-                    //driver.Completed();
                     InternalStop(driver);
                 }
-
-                //EndCoroutine(driver);
             }
         }
     }
