@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using NReferencePool;
+using UnityEditor;
 using UnityEngine;
 
 namespace NCoroutine
 {
     public static class Coroutine
     {
-        //这里最优的存储应该是参考dotweene内部的数组方式,需要一种查询为O1
+        //存储方式有优化空间
         private static readonly List<CoroutineDriver> waitAdds;
         private static readonly List<CoroutineDriver> drivers;
         private static readonly List<CoroutineDriver> waitRemoves;
@@ -26,7 +27,11 @@ namespace NCoroutine
             device.coroutineUpdate += Update;
         }
 
-
+        /// <summary>
+        /// 运行一个协程,当前帧添加进队列,下一帧开始执行
+        /// </summary>
+        /// <param name="cor"></param>
+        /// <returns></returns>
         public static CoroutineHandle Run(IEnumerator cor)
         {
             CoroutineHandle handle = new CoroutineHandle();
@@ -36,12 +41,20 @@ namespace NCoroutine
             return handle;
         }
 
+        /// <summary>
+        /// 停止一个协程
+        /// </summary>
+        /// <param name="handle"></param>
         public static void Stop(CoroutineHandle handle)
         {
             if (handle?.driver == null) return;
             InternalStop(handle.driver);
         }
 
+        /// <summary>
+        /// 停止一个协程,当前帧立刻标记为完成,执行等待器的延续函数,下一帧删除并清理
+        /// </summary>
+        /// <param name="driver"></param>
         private static void InternalStop(CoroutineDriver driver)
         {
             if (!driver.isComplete)
@@ -51,6 +64,9 @@ namespace NCoroutine
                 driver.handle.awaiter?.Complete();
             }
         }
+        /// <summary>
+        /// 统一删除并清理内部协程
+        /// </summary>
         private static void RemoveCoroutine()
         {
             foreach (CoroutineDriver driver in waitRemoves)
@@ -121,7 +137,6 @@ namespace NCoroutine
 
         void IReference.Clear()
         {
-            Debug.Log("baseClear");
             baseWait = null;
         }
 

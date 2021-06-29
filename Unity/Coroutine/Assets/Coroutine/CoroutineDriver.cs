@@ -7,46 +7,38 @@ namespace NCoroutine
 {
     internal sealed class CoroutineDriver : IReference
     {
-        //internal CoroutineAwaiter awaiter;
-
+        private readonly Stack<IEnumerator> waitEnumerators;
         internal IEnumerator enumerator;
 
         internal CoroutineHandle handle;
 
         internal bool isComplete;
 
-        private readonly Stack<IEnumerator> waitEnumerators;
-
         public CoroutineDriver()
         {
             waitEnumerators = new Stack<IEnumerator>(4);
+        }
+
+        public void Clear()
+        {
+            handle = null;
+            if (enumerator is IWaitable waitable) ReferencePool.Release(waitable);
+
+            enumerator = null;
+            
+            while (waitEnumerators.Count > 0)
+            {
+                IEnumerator stackWaitable = waitEnumerators.Pop();
+                if (stackWaitable is IWaitable wait) ReferencePool.Release(wait);
+            }
+
+            waitEnumerators.Clear();
         }
 
         internal void Completed()
         {
             handle.driver = null;
             isComplete = true;
-        }
-
-        public void Clear()
-        {
-            handle = null;
-            if (enumerator is IWaitable waitable)
-            {
-                ReferencePool.Release(waitable);
-            }
-
-            enumerator = null;
-            while (waitEnumerators.Count > 0)
-            {
-                var stackWaitable = waitEnumerators.Pop();
-                if (stackWaitable is IWaitable wait)
-                {
-                    ReferencePool.Release(wait);
-                }
-            }
-
-            waitEnumerators.Clear();
         }
 
         public static CoroutineDriver Create(IEnumerator enumerator, CoroutineHandle handle)
