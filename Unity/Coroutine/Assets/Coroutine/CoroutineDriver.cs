@@ -31,7 +31,21 @@ namespace NCoroutine
         public void Clear()
         {
             handle = null;
+            if (enumerator is IWaitable waitable)
+            {
+                ReferencePool.Release(waitable);
+            }
+
             enumerator = null;
+            while (waitEnumerators.Count > 0)
+            {
+                var stackWaitable = waitEnumerators.Pop();
+                if (stackWaitable is IWaitable wait)
+                {
+                    ReferencePool.Release(wait);
+                }
+            }
+
             waitEnumerators.Clear();
         }
 
@@ -49,8 +63,6 @@ namespace NCoroutine
         {
             if (enumerator.MoveNext())
             {
-                //这里判断只有一种情况为真,协程在内部自己停止自己
-           
                 switch (enumerator.Current)
                 {
                     case null:

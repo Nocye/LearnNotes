@@ -14,11 +14,11 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            // selfStopSelf = Coroutine.Run(SelfStopSelf());
+            selfStopSelf = Coroutine.Run(SelfStopSelf());
             // //这里的顺序不同会有不同的表现,所以具体的逻辑不能依赖协程的执行顺序
             // stopOther = Coroutine.Run(Other());
             // Coroutine.Run(StopOther());
-            TestAwait();
+            //TestAwait();
         }
 
         private async void TestAwait()
@@ -57,11 +57,21 @@ namespace DefaultNamespace
 
         private IEnumerator SelfStopSelf()
         {
-            yield return new WaitForTime(1f);
+            yield return null;
             Coroutine.Stop(selfStopSelf);
             Debug.Log("StopSelf");
-            yield return null;
+            yield return WaitPredicate.Create(() =>
+            {
+                timerr += Time.deltaTime;
+
+                return timerr < 2;
+            });
+            
+
+            
             yield break;
         }
+
+        private float timerr;
     }
 }

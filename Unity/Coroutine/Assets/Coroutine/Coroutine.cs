@@ -121,6 +121,7 @@ namespace NCoroutine
 
         void IReference.Clear()
         {
+            Debug.Log("baseClear");
             baseWait = null;
         }
 
