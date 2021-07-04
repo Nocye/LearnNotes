@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using UnityEngine;
 
 namespace Timer
 {
     public class MinimumHeap<T> where T : IComparable<T>
     {
-        private T[] arr;
-        private int tail = 0;
         private readonly IComparer<T> comparer;
+        private T[] arr;
+        private int tail;
 
 
         public MinimumHeap() : this(4, null)
@@ -19,30 +16,29 @@ namespace Timer
 
         public MinimumHeap(int capacity, IComparer<T> comparer)
         {
-            arr = new T[4];
+            arr = new T[capacity];
             this.comparer = comparer ?? Comparer<T>.Default;
         }
 
 
         public void Enqueue(T value)
         {
-            if (arr.Length - 1 < tail + 1)
-            {
-                Array.Resize(ref arr, arr.Length * 2);
-            }
+            if (arr.Length - 1 < tail + 1) Array.Resize(ref arr, arr.Length * 2);
 
             tail++;
-            T keyValue = value;
-            arr[tail] = keyValue;
+            arr[tail] = value;
             int index = tail;
-            while (index / 2 >= 0 &&
-                   0 > comparer.Compare(arr[index], arr[index / 2]))
-                // heap[index].Key < heap[index / 2].Key
+            int parentIndex = tail / 2;
+            //添加节点时从下往上堆化,保证自己只小于自己的父节点，如果是根节点的左右子节点，保证只小于根节点
+            //在下次删除时，直接在根节点的左右子节点寻找最小的，与根节点交换
+            while (parentIndex >= 0 &&
+                   0 > comparer.Compare(arr[index], arr[parentIndex]))
             {
-                var temp = arr[index];
-                arr[index] = arr[index / 2];
-                arr[index / 2] = temp;
-                index /= 2;
+                T temp = arr[index];
+                arr[index] = arr[parentIndex];
+                arr[parentIndex] = temp;
+                index = parentIndex;
+                parentIndex /= 2;
             }
         }
 
@@ -55,34 +51,27 @@ namespace Timer
 
         public T Peek()
         {
-            if (tail < 1)
-            {
-                return default(T);
-            }
+            if (tail < 1) return default;
 
             return arr[1];
         }
 
         private void Heapify(T[] arr, int length, int index)
         {
-            while (true)
+            //现在的根节点是我们刚取的最后一个节点，他是一个比较大的节点
+            //从上往下堆化,保证取把子树中最小的节点与子树根节点交换,根节点的左右节点最小的那个，就是堆中现在最小的节点
+            while (index <= length)
             {
                 int maxPos = index;
-                if (index * 2 <= length &&
-                    0 < comparer.Compare(arr[index], arr[index * 2])) //arr[index].Key > arr[index * 2].Key)
-                {
-                    maxPos = index * 2;
-                }
+                int left = index * 2;
+                if (left <= length &&
+                    0 < comparer.Compare(arr[index], arr[left]))
+                    maxPos = left;
 
-                if (index * 2 + 1 <= length && 0 < comparer.Compare(arr[index], arr[index * 2 + 1]))
-                {
-                    maxPos = index * 2 + 1;
-                }
+                int right = left + 1;
+                if (right <= length && 0 < comparer.Compare(arr[maxPos], arr[right])) maxPos = right;
 
-                if (maxPos == index)
-                {
-                    break;
-                }
+                if (maxPos == index) break;
 
                 T temp = arr[index];
                 arr[index] = arr[maxPos];
