@@ -2,16 +2,20 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
 namespace DefaultNamespace
 {
     public class TestTimer : MonoBehaviour
     {
-        private PriorityQueue timer = new PriorityQueue();
+        private Timer.Timer timer = new global::Timer.Timer();
 
         private void Start()
         {
             Debug.Log($"Current : {Time.time}");
-            timer.Enqueue(() => { Debug.Log("Start"); }, Time.time + 2f);
+            for (int i = 0; i < 4; i++)
+            {
+                timer.AddDelayTask(() => { Debug.Log("Start"); }, 2f);
+            }
         }
 
         private void Update()
@@ -21,10 +25,10 @@ namespace DefaultNamespace
                 int r = Random.Range(1, 4);
                 var t = Time.time + r;
                 var tm = Time.time;
-                timer.Enqueue(() => { Debug.Log($"Updata : {t} Time: {r}"); }, t);
+                timer.AddDelayTask(() => { Debug.Log($"Updata : {t} Time: {tm} Delay: {r}"); }, r);
             }
 
-            timer.Update(Time.time);
+            timer.Update();
         }
     }
 }
