@@ -1,6 +1,8 @@
 ![](https://raw.githubusercontent.com/Nocye/ImageBed/master/20200720114911.jpg)
 
-如果想要自定义等待类型,需要实现 **TaskAwaiter** 的鸭子属性,即
+[await表达式是如何处理的？](https://github.com/dotnet/csharplang/blob/main/spec/expressions.md#await-expressions) 
+
+如果想要自定义等待类型,需要实现 **Awaitable** 可等待类型,即
 
 ```c#
 public bool IsCompleted { get; }
