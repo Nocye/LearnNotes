@@ -1,3 +1,5 @@
+学习马三的博客发现下面这种latebinding的方法已过时，现在可以直接勾选Include in Build，打包时过滤掉SpriteAtlas文件，同图集的散图打进同个包，需要的图片正常根据路径加载就好。([【Unity游戏开发】SpriteAtlas与AssetBundle最佳食用方案](https://www.cnblogs.com/msxh/p/14194756.html))
+
 Include in Build 选项，非常容易引起歧义，
 
 使用场景：部分带着图片的UI预制体，这些图片已经打进了图集，且在打AB包时只打图集不打散图。
@@ -31,4 +33,6 @@ var o = Instantiate(obj);
 ```
 
 猜测Unity底层维护了一份数据记载了引用图片的图集归属，因为图集的获取Sprite和普通的获取Sprite获取的方式有所不同，所以做了这个manager。
+
+
 
