@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Timer
 {
-    public class MinimumHeap<T> where T : IComparable<T>
+    public class MinimumHeap<T>
     {
         private readonly IComparer<T> comparer;
         private T[] items;
         private int heapCount;
 
 
-        public MinimumHeap() : this(4, null)
+        public MinimumHeap(IComparer<T> comparer) : this(4, comparer)
         {
         }
 
@@ -19,15 +19,6 @@ namespace Timer
             items = new T[capacity];
             this.comparer = comparer ?? Comparer<T>.Default;
         }
-
-        public MinimumHeap(IEnumerable<T> enumerable) : this()
-        {
-            foreach (T item in enumerable)
-            {
-                Enqueue(item);
-            }
-        }
-
 
 
         public T Peek()
@@ -45,6 +36,7 @@ namespace Timer
             items[heapCount] = value;
             Swim(heapCount);
         }
+
         public void Dequeue()
         {
             items[1] = items[heapCount];

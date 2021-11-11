@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NReferencePool;
 using UnityEngine;
 
@@ -6,10 +7,22 @@ namespace Timer
 {
     public partial class Timer
     {
-        private class TaskInfo : IComparable<TaskInfo>, IEquatable<TaskInfo>, IReference
+        internal class TaskInfoCompare : IComparer<TaskInfo>
+        {
+            public int Compare(TaskInfo x, TaskInfo y)
+            {
+                if (ReferenceEquals(x, y)) return 0;
+                if (ReferenceEquals(null, y)) return 1;
+                if (ReferenceEquals(null, x)) return -1;
+                return x.Time.CompareTo(y.Time);
+            }
+        }
+
+        internal class TaskInfo : IReference  
         {
             public float Time;
             public Action Task;
+            public bool isStop;
 
             public TaskInfo()
             {
@@ -24,40 +37,11 @@ namespace Timer
             }
 
 
-            public bool Equals(TaskInfo other)
-            {
-                if (ReferenceEquals(null, other)) return false;
-                if (ReferenceEquals(this, other)) return true;
-                return Time.Equals(other.Time) && Equals(Task, other.Task);
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != this.GetType()) return false;
-                return Equals((TaskInfo) obj);
-            }
-
-            public override int GetHashCode()
-            {
-                unchecked
-                {
-                    return (Time.GetHashCode() * 397) ^ (Task != null ? Task.GetHashCode() : 0);
-                }
-            }
-
             public void Clear()
             {
                 this.Time = 0;
                 this.Task = null;
-            }
-
-            public int CompareTo(TaskInfo other)
-            {
-                if (ReferenceEquals(this, other)) return 0;
-                if (ReferenceEquals(null, other)) return 1;
-                return Time.CompareTo(other.Time);
+                this.isStop = false;
             }
         }
     }

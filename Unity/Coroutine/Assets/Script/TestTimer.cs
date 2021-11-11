@@ -14,7 +14,7 @@ namespace DefaultNamespace
             Debug.Log($"Current : {Time.time}");
             for (int i = 0; i < 4; i++)
             {
-                timer.AddDelayTask(() => { Debug.Log("Start"); }, 2f);
+                timer.StartTask(() => { Debug.Log("Start"); }, 2f);
             }
         }
 
@@ -25,9 +25,11 @@ namespace DefaultNamespace
                 int r = Random.Range(1, 4);
                 var t = Time.time + r;
                 var tm = Time.time;
-                timer.AddDelayTask(() => { Debug.Log($"Updata : {t} Time: {tm} Delay: {r}"); }, r);
+                Debug.Log(Time.time);
+                var handle =
+                    timer.StartTask(() => { Debug.Log($"Updata : {t} Time: {tm} Delay: {r} Current:{Time.time}"); }, r);
+                timer.StopTask(handle);
             }
-
             timer.Update();
         }
     }
