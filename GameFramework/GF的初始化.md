@@ -12,3 +12,10 @@ GameFrameworkEntry.GetModule<T>()where T : class
 
 框架内部通过传入的类型参数获取T的Type元数据,创建模块实例,返回接口给调用方使用.
 
+GF层为惰性初始化，不Get则不会初始化，UGF层通过挂在预制体上的Mono的Awake方法来初始化
+
+UGF 在Awake中初始化自己，等于new，在Start中获取其他依赖的component ，UGF的component相当于GF层Manager的封装，使用Unity的特性去实现部分功能，其他部分还是直接调用GF的Manager。
+
+Q：为什么明明GF层都是Manager实现，但是却只返回接口？
+
+A：面向接口，减少耦合，如果以后你想实现自己的Manager也是可以的，参考StartForce的EditorManager
