@@ -2,3 +2,5 @@
 
 如果需要打包的纹理，需要开启read/write，spine的没提示。
 
+使用Graphics.CopyTexture 这个API去复制纹理时，请注意quality选项中的texture quality选项 是否为full res，如果不为full 会导致复制出来的纹理只有原纹理的一部分，而且不报错不警告（发现版本2019.4.31）
+
