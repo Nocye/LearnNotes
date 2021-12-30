@@ -11,14 +11,71 @@ namespace DefaultNamespace
         private CoroutineHandle selfStopSelf;
         private CoroutineHandle stopOther;
         private CoroutineHandle awaitTest;
+        UnityEngine.Coroutine cor;
 
         private void Start()
         {
-            selfStopSelf = Coroutine.Run(SelfStopSelf());
+            //selfStopSelf = Coroutine.Run(SelfStopSelf());
             // //这里的顺序不同会有不同的表现,所以具体的逻辑不能依赖协程的执行顺序
             // stopOther = Coroutine.Run(Other());
             // Coroutine.Run(StopOther());
             //TestAwait();
+            // StartCoroutine(Run1());
+            // StartCoroutine(Run2());
+            selfStopSelf = Coroutine.Run(Run1());
+            Coroutine.Run(Run2());
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                // selfStopSelf = Coroutine.Run(Run1());
+                // Coroutine.Run(Run2());
+                StartCoroutine(Run1());
+                StartCoroutine(Run2());
+
+                // cor = StartCoroutine(Run11());
+                // StartCoroutine(Run22());
+            }
+        }
+
+        private IEnumerator Run1()
+        {
+            Debug.Log("Run1");
+            Debug.Log("r1 " + Time.frameCount);
+
+            yield break;
+        }
+
+        private IEnumerator Run2()
+        {
+            yield return NCoroutine.Coroutine.Run(Run1());
+            yield return NCoroutine.Coroutine.Run(Run1());
+            yield return NCoroutine.Coroutine.Run(Run1());
+            yield return NCoroutine.Coroutine.Run(Run1());
+            yield return NCoroutine.Coroutine.Run(Run1());
+            Debug.Log("Run2");
+            Debug.Log("r2 " + Time.frameCount);
+
+            yield break;
+        }
+
+        private IEnumerator Run11()
+        {
+            Debug.Log("Run1");
+            Debug.Log("r11 " + Time.frameCount);
+
+            yield break;
+        }
+
+        private IEnumerator Run22()
+        {
+            yield return cor;
+            Debug.Log("Run2");
+            Debug.Log("r22 " + Time.frameCount);
+
+            yield break;
         }
 
         private async void TestAwait()
@@ -66,9 +123,8 @@ namespace DefaultNamespace
 
                 return timerr < 2;
             });
-            
 
-            
+
             yield break;
         }
 
