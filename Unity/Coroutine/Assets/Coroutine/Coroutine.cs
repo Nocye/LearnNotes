@@ -28,16 +28,20 @@ namespace NCoroutine
         }
 
         /// <summary>
-        /// 运行一个协程,当前帧添加进队列,下一帧开始执行
+        /// 运行一个协程,立即执行
         /// </summary>
         /// <param name="cor"></param>
         /// <returns></returns>
         public static CoroutineHandle Run(IEnumerator cor)
         {
             CoroutineHandle handle = new CoroutineHandle();
-            CoroutineDriver driver = CoroutineDriver.Create(cor, handle);
-            handle.driver = driver;
-            waitAdds.Add(driver);
+            if (cor.MoveNext())
+            {
+                CoroutineDriver driver = CoroutineDriver.Create(cor, handle);
+                handle.driver = driver;
+                waitAdds.Add(driver);
+            }
+
             return handle;
         }
 
@@ -64,6 +68,7 @@ namespace NCoroutine
                 driver.handle.awaiter?.Complete();
             }
         }
+
         /// <summary>
         /// 统一删除并清理内部协程
         /// </summary>
@@ -114,7 +119,7 @@ namespace NCoroutine
 
         bool IEnumerator.MoveNext()
         {
-            return !driver.isComplete;
+            return driver != null && !driver.isComplete;
         }
 
         void IEnumerator.Reset()
