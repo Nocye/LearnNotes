@@ -22,8 +22,33 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            group = CoroutineGroup.Create(new Func<IEnumerator>[] {Group1, Group2, Group3});
-            dayuhandle =  Coroutine.Run(TestCancel());
+            // group = CoroutineGroup.Create(new Func<IEnumerator>[] {Group1, Group2, Group3});
+            // dayuhandle = Coroutine.Run(TestCancel());
+            cor2 = StartCoroutine(Main());
+            StopCoroutine(cor2);
+            Debug.Log(cor == null);
+        }
+
+        UnityEngine.Coroutine cor;
+        UnityEngine.Coroutine cor2;
+
+        private IEnumerator Main()
+        {
+            yield return wait1();
+            yield break;
+        }
+
+        private IEnumerator wait1()
+        {
+            cor = StartCoroutine(Wait2());
+            yield return cor;
+        }
+
+        private IEnumerator Wait2()
+        {
+            yield return new WaitForSeconds(2f);
+            Debug.Log("Wait2()");
+            yield break;
         }
 
         private async void Runnn()
@@ -50,6 +75,10 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                StopCoroutine(cor2);
+            }
         }
 
         private void OnGUI()
