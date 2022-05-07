@@ -2,6 +2,14 @@
 
 [await表达式是如何处理的？](https://github.com/dotnet/csharplang/blob/main/spec/expressions.md#await-expressions) 
 
+ 	 1、先调用t.GetAwaiter()方法，取得等待器a；
+      2、调用a.IsCompleted取得布尔类型b；
+      3、如果b=true，则立即执行a.GetResult()，取得运行结果；
+      4、如果b=false，则看情况：
+      4.1、如果a没实现ICriticalNotifyCompletion，则执行(a as INotifyCompletion).OnCompleted(action)
+      4.2、如果a实现了ICriticalNotifyCompletion，则执行(a as ICriticalNotifyCompletion).OnCompleted(action)
+      4.3、执行随后暂停，SetResult时执行OnCompleted重新回到状态机；
+
 如果想要自定义等待类型,需要实现 **Awaitable** 可等待类型,即
 
 ```c#
@@ -35,4 +43,6 @@ public async Task<int> Result()
 ```
 
 初始异步时有一个误解，认为遇见await时，就会返回这个await等待的task，实际并非如此，这个方法在第一个task和第二个task等待返回时依然是返回一个Task<int>，但是这个Task的状态是未完成的 ，暂时无法获得返回值。也就是说这些方法中的task是最外部Task<int>的子task。
+
+
 
