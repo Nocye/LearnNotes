@@ -5,3 +5,4 @@ Unity/*/[Oo]bj/
 Unity/*/*.csproj
 Unity/*/*.sln
 Unity/*/.idea/
+.idea
