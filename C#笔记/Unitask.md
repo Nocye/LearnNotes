@@ -1,0 +1,2 @@
+unitask的取消机制是通过异常来实，unitask内部调用的迭代方法会在开头进行取消检测，检测到token被取消，会抛出一个错误给unitask，unitask的状态机构建会检测错误类型是否是OperationCanceledException 把拥有这个错误类型的task视为被取消，同时嵌套状态机在GetResult的时候也会获得这个错误，进入终止逻辑
+
